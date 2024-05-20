@@ -16,6 +16,7 @@ export default styles = StyleSheet.create({
         borderRadius: 10,
     },
     input: {
+        alignSelf: 'center',
         padding: 10,
         width: 300,
         height: 40,

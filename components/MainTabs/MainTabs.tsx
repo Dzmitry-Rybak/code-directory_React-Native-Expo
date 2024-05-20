@@ -9,6 +9,8 @@ import AddQuestion from "../Form/AddQuestion/AddQuestion";
 import FormNavigation from "../Form/FormNavigation/FormNavigation";
 import Dashboard from '../Dashboard/Dashboard';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 enum Icons {
     HOME = 'home',
     HOME_OUTLINE = 'home-outline',

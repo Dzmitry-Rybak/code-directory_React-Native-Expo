@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useSelector, useDispatch } from 'react-redux';
-import { questionSelected, questionSelectedId, filteredQuestion } from '../../redux/actions';
+import { questionSelectedId, filteredQuestion } from '../../redux/actions';
 
 import { IRootState } from '../../interfaces/Questions';
+import { getTextDecoration, getColor } from './dynamicStyles';
 import styles from './DrawerContentStyles';
  
 
@@ -13,8 +14,9 @@ import styles from './DrawerContentStyles';
 interface DrawerContentPoprs extends DrawerContentComponentProps {}
 
 const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
+    const [filteredQuestions, setFilteredQuestions] = React.useState([]);
 
-    const {questions} = useSelector((state:IRootState) => state.questionsReducer);
+    const {questions, selectedId, isLogged} = useSelector((state:IRootState) => state.questionsReducer);
     const {filter, repeatQuestion, memorizedQuestions} = useSelector((state) => state.filterReducer);
     
     const dispatch = useDispatch();
@@ -25,7 +27,7 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
 
     const filterQuestions = (items, filter) => {
         if(repeatQuestion.length === 0 && filter === 'repeat') {
-            console.log('NO QUESTIONS TO REPEAT YET');
+            Alert.alert('No questions to repeat yet')
         }
         switch (filter) {
             case 'repeat':
@@ -38,15 +40,23 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
                 return items
         }
     }
-    
 
+    React.useEffect(() => {
+        setFilteredQuestions(filterQuestions(questions, filter));
+    }, [questions, filter])
+    
     const renderItem = ({ item }) => (
         <TouchableOpacity 
             onPress={() => {
                     dispatch(questionSelectedId(item.question_id));
                     navigation.closeDrawer();
                 }}>
-            <Text style={{marginTop: 15, fontSize: 17, fontWeight: 'bold'}}>{item.question_id}. {item.question}</Text>
+            <Text style={{
+                marginTop: 15, 
+                fontSize: 17, 
+                fontWeight: 'bold', 
+                color: getColor(item.question_id, repeatQuestion, memorizedQuestions),
+                textDecorationLine: getTextDecoration(item.question_id, selectedId)}}>{item.question_id}. {item.question}</Text>
         </TouchableOpacity>
     );
 
@@ -71,7 +81,7 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
                 
             </View>
             <FlatList
-                data={filterQuestions(questions, filter)}
+                data={filteredQuestions}
                 renderItem={renderItem}
                 keyExtractor={item => item.question_id}
             />

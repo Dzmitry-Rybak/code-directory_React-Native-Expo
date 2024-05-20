@@ -4,6 +4,7 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import MainTabs from "../MainTabs/MainTabs";
 import {Loading} from "../Loading/Loading";
@@ -14,7 +15,7 @@ import { fetchQuestionsData } from "../../service/fetches";
 const Drawer = createDrawerNavigator();
 
 import { useDispatch, useSelector } from "react-redux";
-import { questionsFetched } from "../../redux/actions";
+import { questionsFetched, isLoggedIn } from "../../redux/actions";
 
 const MainComponent = () => {
     const {language, stack, isLogged} = useSelector(stack => stack.questionsReducer);
@@ -33,6 +34,14 @@ const MainComponent = () => {
             .finally(() => setIsLoading(false))
     }
 
+    const getUsername = async () => {
+        const userName = await AsyncStorage.getItem('login');
+        if(userName) {
+            dispatch(isLoggedIn(true))
+        } else {
+            dispatch(isLoggedIn(false))
+        }
+    }
     
     React.useEffect(() => {
         fetchQuestins();
@@ -40,6 +49,7 @@ const MainComponent = () => {
     
     React.useEffect(() => {
         fetchQuestins();
+        getUsername();
     }, [language, stack, isLogged]);
 
     if(isLoading){
@@ -63,8 +73,8 @@ const MainComponent = () => {
                         screenOptions={{
                             headerShown: false,
                             drawerStyle: {
-                                backgroundColor: 'white',
-                                width: 300,
+                                backgroundColor: '#6a8c94',
+                                width: '80%',
                             },
                         }}>
                         <Drawer.Screen 

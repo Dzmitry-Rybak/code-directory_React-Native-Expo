@@ -10,8 +10,14 @@ export const FILTER = 'FILTER';
 export const REPEAT_QUESTION = 'REPEAT_QUESTION';
 export const MEMORIZED_QUESTIONS = 'MEMORIZED_QUESTIONS';
 
-export const questionsFetching = () => ({
-    type: 'QUESTIONS_FETCHING'
+export const questionsFetching = (isLoadingQuestions) => ({
+    type: 'QUESTIONS_FETCHING',
+    payload: isLoadingQuestions
+});
+
+export const questionsUpdate = (updateQuestionsFetch) => ({
+    type: 'QUESTIONS_FETCHING',
+    payload: updateQuestionsFetch
 });
 
 export const questionsFetched = (questions) => {
@@ -27,10 +33,10 @@ export const questionSelected = (pickedQuestion) => {
         payload: pickedQuestion
     }
 }
-export const questionSelectedId = (pickedQuestion) => {
+export const questionSelectedId = (id) => {
     return {
         type: 'QUESTION_SELECTED_ID',
-        payload: pickedQuestion
+        payload: id
     }
 }
 

@@ -8,7 +8,7 @@ export default styles = StyleSheet.create({
     },
     langugage: {
         fontWeight: 'bold',
-        fontSize: 40,
+        fontSize: 30,
         color: 'white',
         marginRight: 15,
     }

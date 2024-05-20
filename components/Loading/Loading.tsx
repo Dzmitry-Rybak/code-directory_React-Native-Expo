@@ -24,3 +24,17 @@ export const LoadingAnswer = () => {
     </View>
   )
 }
+
+export const LoadingHomeContent = () => {
+  return (
+    <View style={{paddingHorizontal: 15, paddingVertical: 15}}>
+      <View style={{flexDirection: 'row', marginBottom: 15, alignItems: 'center', justifyContent: 'center'}}>
+          <View style={{width: 100, height: 100, backgroundColor: 'red'}}/>
+          <View style={{width: 50, height: 50, backgroundColor: 'blue'}}/>
+      </View>
+      <View style={{alignItems: 'center'}}>
+        <View style={{width: 50, height: 50, backgroundColor: 'green'}}/>
+      </View>
+  </View>
+  )
+}

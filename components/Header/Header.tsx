@@ -20,7 +20,7 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                 </TouchableOpacity>
                 <View style={styles.picker}>
                     <RNPickerSelect
-                                placeholder={{ label: "Coding Stack", value: null }}
+                                placeholder={{ label: "Coding Stack", value: 'javascript' }}
                                 onValueChange={(value) => dispatch(stackSelected(value))}
                                 style={{
                                     inputAndroid: {
@@ -55,7 +55,7 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                 </View>
                 <View style={styles.picker}>
                     <RNPickerSelect
-                                placeholder={{ label: "Langugage", value: null }}
+                                placeholder={{ label: "Langugage", value: 'english' }}
                                 onValueChange={(value) => dispatch(languageSelected(value))}
                                 style={{
                                     inputAndroid: {
@@ -82,9 +82,9 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                                     },
                                 }}
                                 items={[
-                                    { label: 'English', value: 'English' },
-                                    { label: 'Russian', value: 'Russian' },
-                                    { label: 'Polish', value: 'hockey' },
+                                    { label: 'English', value: 'english' },
+                                    { label: 'Russian', value: 'russian' },
+                                    { label: 'Polish', value: 'polish' },
                                 ]}/>
                 </View>
             </View>

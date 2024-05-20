@@ -24,9 +24,5 @@ export default styles = StyleSheet.create({
         backgroundColor: '#417647',
         width: '60%',
         borderRadius: 7
-    },
-    fractions: {
-        color: 'white',
-        fontSize: 18
     }
 })

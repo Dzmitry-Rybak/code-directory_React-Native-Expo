@@ -20,6 +20,7 @@ export default styles = StyleSheet.create({
         marginVertical: 10,
     },
     input: {
+        alignSelf: 'center',
         padding: 10,
         width: 300,
         height: 60,
@@ -33,6 +34,7 @@ export default styles = StyleSheet.create({
         borderRightColor: '#205c00',
     },
     picker: {
+        alignSelf: 'center',
         padding: 10,
         width: 300,
         height: 40,

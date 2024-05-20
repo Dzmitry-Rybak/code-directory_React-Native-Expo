@@ -72,7 +72,7 @@ const CreateAccount: React.FC = () => {
                             value={values.login}
                         />
                         {errors.login && touched.login &&
-                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.login}</Text>
+                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.login}</Text>
                         }
 
                         <TextInput
@@ -84,7 +84,7 @@ const CreateAccount: React.FC = () => {
                             keyboardType="email-address"
                         />
                         {errors.email && touched.email &&
-                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.email}</Text>
+                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.email}</Text>
                         }
 
                         <TextInput
@@ -96,7 +96,7 @@ const CreateAccount: React.FC = () => {
                             keyboardType="email-address"
                         />
                         {errors.emailConfirm && touched.emailConfirm &&
-                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.emailConfirm}</Text>
+                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.emailConfirm}</Text>
                         }
 
                         <TextInput
@@ -108,7 +108,7 @@ const CreateAccount: React.FC = () => {
                             secureTextEntry={true}
                         />
                         {errors.password && touched.password &&
-                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.password}</Text>
+                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.password}</Text>
                         }
 
                         <TextInput
@@ -120,10 +120,10 @@ const CreateAccount: React.FC = () => {
                             secureTextEntry={true}
                         />
                         {errors.passwordConfirm && touched.passwordConfirm &&
-                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.passwordConfirm}</Text>
+                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.passwordConfirm}</Text>
                         }
 
-                    <View style={{flexDirection: 'row', marginTop: 20, width: 300}}>
+                    <View style={{flexDirection: 'row', marginTop: 20, width: 300, alignSelf: 'center'}}>
                         <BouncyCheckbox
                             size={20}
                             fillColor="black"
@@ -134,7 +134,7 @@ const CreateAccount: React.FC = () => {
                         <Text>I confirm that I've read and I agree to the site's Terms & Conditions*</Text>
                     </View>
                     {errors.terms && touched.terms &&
-                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.terms}</Text>
+                            <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.terms}</Text>
                     }
 
                         <TouchableOpacity style={styles.submit} onPress={ handleSubmit }>

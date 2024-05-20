@@ -1,73 +1,92 @@
 import React from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Alert } from "react-native";
 
 import { useSelector, useDispatch } from 'react-redux';
 
 import { IRootState } from "../../interfaces/Questions";
 import styles from './QuestionContentStyles';
 import { fetchAnswerData } from "../../service/fetches";
-import { questionSelected, questionSelectedId, repeatData, memorizedData } from "../../redux/actions";
-import {LoadingAnswer} from "../Loading/Loading";
+import { questionSelected, questionSelectedId, repeatData, memorizedData, questionsFetching } from "../../redux/actions";
+import { LoadingAnswer} from "../Loading/Loading";
 
 import { getFilteredQuestions, postFilteredQuestons } from "../../service/fetches";
 
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+// import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { ModalExample } from "../Modal/Modal";
 
 
 const QuestionContent: React.FC = () => {
-    // const [repeatQuestion, setRepeatQuestion] = React.useState([]);
-    // const [memorizedQuestions, setMemorizedQuestions] = React.useState([]);
+    const [isModalVisibleExample, setIsModalVisibleExample] = React.useState(false);
+    const [isNextDisable, setIsNextDisable] = React.useState(false);
+    const [isPrevDisable, setIsPrevDisable] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
 
-    const {pickedQuestion, selectedId, stack, language} = useSelector((state:IRootState) => state.questionsReducer);
-    const {filter, repeatQuestion, memorizedQuestions} = useSelector((state) => state.filterReducer);
+    const {pickedQuestion, selectedId, stack, language, isLogged, questions, isLoadingQuestions} = useSelector((state:IRootState) => state.questionsReducer);
+    const { repeatQuestion, memorizedQuestions } = useSelector((state) => state.filterReducer);
 
     const dispatch = useDispatch();
 
+    React.useEffect(() => {
+        setIsNextDisable(selectedId === questions.length);
+        setIsPrevDisable(selectedId === 1);
+    }, [selectedId, questions.length]);
+
     const fetchAnswer = async () => {
-        setIsLoading(true);
+        // setIsLoading(true);
+        dispatch(questionsFetching(true));
         await fetchAnswerData(selectedId, stack, language)
         .then(data => {
-            setIsLoading(false);
+            // setIsLoading(false);
+            dispatch(questionsFetching(false));
             dispatch(questionSelected(data.data[0]))
         })
     }
 
     const filtersRequest = async () => {
         await getFilteredQuestions(stack, language).then(req => {
-            const { data: { repeat: repeatDatas, memorized: memorizedDatas } } = req;
-            dispatch(repeatData(repeatDatas));
-            dispatch(memorizedData(memorizedDatas));
-            // setRepeatQuestion(repeatDatas);
-            // setMemorizedQuestions(memorizedDatas);
+            dispatch(repeatData([]));
+            dispatch(memorizedData([]));
+            if(req.message !== 'Unauthorized' && req.data) {
+                const { data: { repeat: repeatDatas, memorized: memorizedDatas } } = req;
+                dispatch(repeatData(repeatDatas));
+                dispatch(memorizedData(memorizedDatas));
+                dispatch(questionsFetching(false));
+            }
         })
     } 
 
     const handleNextQuestion = () => {
         const nextQuestion = selectedId + 1;
-        console.log(repeatQuestion)
         dispatch(questionSelectedId(nextQuestion))
+        if(nextQuestion === (questions.length)) {
+            setIsNextDisable(true);
+        }
     }
     const handlePrevQuestion = () => {
-        const prevQuestion = selectedId - 1
+        const prevQuestion = selectedId - 1;
+        if(prevQuestion === 1) {
+            setIsPrevDisable(true);
+        }
         dispatch(questionSelectedId(prevQuestion))
     }
 
-    
+
+
     React.useEffect(() => {
         fetchAnswer();
-        filtersRequest()
-    }, [selectedId]);
+        filtersRequest();
+    }, [selectedId, isLogged, stack, language]);
     
     React.useEffect(() => {
         fetchAnswer()
     }, []);
     
-    if(isLoading){
+    if(isLoadingQuestions){
         return <LoadingAnswer/>
     }
 
     const onRepeatQuestion = async id => {
+        if(!isNextDisable) handleNextQuestion();
         let updatedRepeatQuestions = [];
         if (repeatQuestion.includes(id)) {
             updatedRepeatQuestions = repeatQuestion.filter(questionId => questionId !== id);
@@ -78,15 +97,13 @@ const QuestionContent: React.FC = () => {
         const updatedMemorizedQuestions = memorizedQuestions.filter(questionId => !updatedRepeatQuestions.includes(questionId));
         dispatch(repeatData(updatedRepeatQuestions));
         dispatch(memorizedData(updatedMemorizedQuestions));
-        // setRepeatQuestion(updatedRepeatQuestions);
-        // setMemorizedQuestions(updatedMemorizedQuestions);
 
         await postFilteredQuestons(stack, language, 'repeat', updatedRepeatQuestions);
         await postFilteredQuestons(stack, language, 'memorized', updatedMemorizedQuestions);
     }
       
     const onMemorizedQuestion = async id => {
-        handleNextQuestion();
+        if(!isNextDisable) handleNextQuestion();
         let updatedMemorizedQuestions = [];
         if (memorizedQuestions.includes(id)) {
             updatedMemorizedQuestions = memorizedQuestions.filter(questionId => questionId !== id);
@@ -97,11 +114,13 @@ const QuestionContent: React.FC = () => {
         const updatedRepeatQuestions = repeatQuestion.filter(questionId => !updatedMemorizedQuestions.includes(questionId));
         dispatch(repeatData(updatedRepeatQuestions));
         dispatch(memorizedData(updatedMemorizedQuestions));
-        // setMemorizedQuestions(updatedMemorizedQuestions);
-        // setRepeatQuestion(updatedRepeatQuestions);
 
         await postFilteredQuestons(stack, language, 'memorized', updatedMemorizedQuestions);
         await postFilteredQuestons(stack, language, 'repeat', updatedRepeatQuestions);
+    }
+    
+    if(!pickedQuestion) {
+        return <LoadingAnswer/>
     }
 
     return (
@@ -110,13 +129,16 @@ const QuestionContent: React.FC = () => {
             <View style={styles.line}/>
             <Text style={styles.answer}>{pickedQuestion.answer}</Text>
             <View style={styles.btnWrapper}>
-                <TouchableOpacity style={styles.btn} onPress={handlePrevQuestion}>
+                <TouchableOpacity style={isPrevDisable ? styles.btnDisabled : styles.btn}  onPress={handlePrevQuestion} disabled={isPrevDisable}>
                     <Text style={styles.btnText}>PREV</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn}>
-                    <Text style={styles.btnText}>EXAMPLE</Text>
+                <TouchableOpacity 
+                    style={pickedQuestion.example_path === 'not available' ? styles.btnDisabled : styles.btn} 
+                    onPress={() => setIsModalVisibleExample(true)} 
+                    disabled={pickedQuestion.example_path === 'not available'}>
+                        <Text style={styles.btnText}>EXAMPLE</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn} onPress={handleNextQuestion}>
+                <TouchableOpacity style={isNextDisable ? styles.btnDisabled : styles.btn} onPress={handleNextQuestion} disabled={isNextDisable}>
                     <Text style={styles.btnText}>NEXT</Text>
                 </TouchableOpacity>
             </View>
@@ -128,6 +150,7 @@ const QuestionContent: React.FC = () => {
                     <Text style={styles.btnText}>MEMORIZED</Text>
                 </TouchableOpacity>
             </View>
+            <ModalExample src={pickedQuestion.example_path} isModalVisibleExample={isModalVisibleExample} setIsModalVisibleExample={setIsModalVisibleExample}/>
         </View>
     )
 }

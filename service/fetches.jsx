@@ -21,7 +21,6 @@ export async function fetchQuestionsData (stack, language) {
             body: null,
             headers: headers
         });
-
         if (!response.ok) {
             const status = response.status;
             const errorData = await response.json();
@@ -39,7 +38,6 @@ export async function fetchQuestionsData (stack, language) {
 export async function fetchAnswerData (questionId, stack, language) {
     try{
         const response = await fetch(`${_APIURL}/getanswer?stack=${stack}&language=${language}&id=${questionId}`);
-
         if (!response.ok) {
             const status = response.status;
             const errorData = await response.json();
@@ -128,7 +126,6 @@ export async function getFilteredQuestions(stack, language) {
         body: null,
         headers: headers
     })
-
     const data = await request.json();
     return data;
 }

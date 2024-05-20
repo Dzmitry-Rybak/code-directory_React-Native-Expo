@@ -17,7 +17,8 @@ interface IQuestionsState {
     selectedId: number;
     language: string,
     stack: string,
-    isLogged: boolean
+    isLogged: boolean,
+    isLoadingQuestions: boolean
 }
 
 interface IQuestionsActions {
@@ -31,11 +32,18 @@ const initialState: IQuestionsState = {
     language: 'english',
     stack: 'javascript',
     selectedId: 1,
-    isLogged: false
+    isLogged: false,
+    isLoadingQuestions: false
 };
 
 export const questionsReducer = (state = initialState, actions: IQuestionsActions) => {
     switch(actions.type){
+        case QUESTIONS_FETCHING: {
+            return {
+                ...state,
+                isLoadingQuestions: actions.payload
+            }
+        }
         case QUESTIONS_FETCHED:
             return {
                 ...state,
@@ -75,7 +83,7 @@ export const questionsReducer = (state = initialState, actions: IQuestionsAction
 const initialFilterState = {
     repeatQuestion: [],
     memorizedQuestions: [],
-    filter: 'repeat'
+    filter: 'all'
 }
 
 export const filterReducer = (state = initialFilterState, actions) => {

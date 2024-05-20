@@ -7,7 +7,7 @@ import { Alert } from 'react-native';
 
 import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../../../redux/actions.js";
-import {ModalLogin} from "../../Modal/Modal";
+import {ModalLogin, ModalIncorrect, ModalNoEmail} from "../../Modal/Modal";
 import { fetchUser } from "../../../service/fetches.jsx";
 import { validSchemaSignIn } from "../validSchema.jsx";
 import styles from '../FormStyles.jsx';
@@ -17,6 +17,8 @@ const SignIn: React.FC = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
+    const [isModalIncorrect, setIsModalIncorrect] = React.useState(false);
+    const [isModalNoEmail, setIsModalNoEmail] = React.useState(false);
 
     
     const goToCreateAccount = () => {
@@ -49,15 +51,15 @@ const SignIn: React.FC = () => {
                             }, 5000)
                             
                         } else if (data.message === 'Password incorrect') {
-                            // setInvalidPassword(true);
-                            // setTimeout(() => {
-                            //     setInvalidPassword(false);
-                            // }, 3000)
+                            setIsModalIncorrect(true);
+                            setTimeout(() => {
+                                setIsModalIncorrect(false);
+                            }, 4000)
                         } else if (data.message === 'There is no users with this email') {
-                            // setInvalidEmail(true);
-                            // setTimeout(() => {
-                            //     setInvalidEmail(false);
-                            // }, 3000)
+                            setIsModalNoEmail(true);
+                            setTimeout(() => {
+                                setIsModalNoEmail(false);
+                            }, 4000)
                         }
                     } catch(error) {
                         Alert.alert('Error while submitting', 'please, try later');
@@ -79,7 +81,7 @@ const SignIn: React.FC = () => {
                         keyboardType="email-address"
                     />
                     {errors.email && touched.email &&
-                        <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.email}</Text>
+                        <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.email}</Text>
                     }
                     
                     <TextInput
@@ -91,7 +93,7 @@ const SignIn: React.FC = () => {
                         secureTextEntry={true}
                     />
                     {errors.password && touched.password &&
-                        <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.password}</Text>
+                        <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.password}</Text>
                     }
                     <TouchableOpacity style={styles.submit} onPress={ handleSubmit } disabled={!isValid}>
                             <Text style={{ textAlign: 'center' }}>SIGN IN</Text>
@@ -104,32 +106,9 @@ const SignIn: React.FC = () => {
             )}
         </Formik>
         <ModalLogin isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible}/>
+        <ModalIncorrect isModalIncorrect={isModalIncorrect} setIsModalIncorrect={setIsModalIncorrect}/>
+        <ModalNoEmail isModalNoEmail={isModalNoEmail} setIsModalNoEmail={setIsModalNoEmail}/>
       </KeyboardAvoidingView>
-
-        // <KeyboardAvoidingView
-        //     style={{ flex: 1 }}
-        //     behavior={Platform.OS === "ios" ? "padding" : undefined}
-        // >
-        //     <View style={styles.container}>
-        //         <View style={styles.wrapper}>
-        //             <Image source={logo} style={{ width: 120, height: 120, alignSelf: 'center', tintColor: 'gray' }} />
-        //             <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 30 }}>Welcome back</Text>
-        //             <Text style={{ textAlign: 'center', marginTop: 5 }}>Sign to continue</Text>
-        //             <TextInput
-        //                 style={styles.input}
-        //                 placeholder="EMAIL" />
-        //             <TextInput
-        //                 style={styles.input}
-        //                 placeholder="PASSWORD" />
-        //             <TouchableOpacity style={styles.submit}>
-        //                 <Text style={{ textAlign: 'center' }}>SIGN IN</Text>
-        //             </TouchableOpacity>
-        //             <TouchableOpacity style={{ alignItems: 'center', marginTop: 20 }} onPress={goToCreateAccount}>
-        //                 <Text style={{textDecorationLine: 'underline'}}>Don't have account? Create a new account</Text>
-        //             </TouchableOpacity>
-        //         </View>
-        //     </View>
-        // </KeyboardAvoidingView>
     )
 }
 

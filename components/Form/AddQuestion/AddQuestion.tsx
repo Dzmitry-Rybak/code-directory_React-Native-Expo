@@ -4,13 +4,28 @@ import { Formik } from 'formik';
 import RNPickerSelect from 'react-native-picker-select';
 import { postQuestion } from "../../../service/fetches";
 import { validSchemaAddQuestion } from "../validSchema";
-import { ModalAddQuestion } from "../../Modal/Modal";
+import { ModalAddQuestionUnauthorized, ModalQuestionAdded } from "../../Modal/Modal";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchQuestionsData } from "../../../service/fetches";
+import { questionsFetched } from "../../../redux/actions";
 
 import styles from './AddQuestionStyles';
 
 const AddQuestion: React.FC = () => {
-
     const [isModalVisibleSignIn, setIsModalVisibleSignIn] = React.useState(false);
+    const [isModalVisibleAdded, setIsModalVisibleAdded] = React.useState(false);
+    const { language, stack } = useSelector(stack => stack.questionsReducer);
+    const dispatch = useDispatch();
+
+    const fetchQuestins = async () => {
+        fetchQuestionsData(stack, language)
+            .then(data => {
+                dispatch(questionsFetched(data.data));
+            })
+            .catch(err => console.error(err))
+    }
+
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
@@ -28,20 +43,22 @@ const AddQuestion: React.FC = () => {
                     try {
                         const data = await postQuestion(values);
                         if (data.message === 'Questions posted successfully') {
+                            setIsModalVisibleAdded(true);
                             values.question = '';
                             values.answer = '';
-                            values.stack = '';
-                            values.language = '';
+                            setTimeout(async () => {
+                                setIsModalVisibleAdded(true);
+                            }, 3000)
                         } else if (data.message === 'Unauthorized') {
                             setIsModalVisibleSignIn(true);
-                            // setTimeout(async () => {
-                            //     setIsModalVisibleSignIn(false);
-                            // }, 5000)
-                        }
-                    } catch(error) {
-                        console.error('Error while submitting:', error)
-                    } finally {
-
+                            setTimeout(async () => {
+                                    setIsModalVisibleSignIn(false);
+                                }, 5000)
+                            }
+                        } catch(error) {
+                            console.error('Error while submitting:', error)
+                        } finally {
+                            fetchQuestins();
                     }
                 }}
             >
@@ -57,7 +74,7 @@ const AddQuestion: React.FC = () => {
                                 onBlur={handleBlur('question')}
                                 placeholder="type your question..." />
                             {errors.question && touched.question &&
-                                <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.question}</Text>
+                                <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.question}</Text>
                             }
                             <TextInput
                                 style={styles.input}
@@ -67,7 +84,7 @@ const AddQuestion: React.FC = () => {
                                 // multiline - но тогда проблемы со скрытием клавиатуры
                                 placeholder="type answer..." />
                             {errors.answer && touched.answer &&
-                                <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.answer}</Text>
+                                <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.answer}</Text>
                             }
                             <View style={styles.picker}>
                                 <RNPickerSelect
@@ -80,19 +97,19 @@ const AddQuestion: React.FC = () => {
                                     ]} />
                             </View>
                             {errors.stack && touched.stack &&
-                                <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.stack}</Text>
+                                <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.stack}</Text>
                             }
                             <View style={styles.picker}>
                                 <RNPickerSelect
                                     onValueChange={lang => values.language = lang}
                                     items={[
-                                        { label: 'English', value: 'English' },
-                                        { label: 'Russian', value: 'Russian' },
-                                        { label: 'Polish', value: 'hockey' },
+                                        { label: 'English', value: 'english' },
+                                        { label: 'Russian', value: 'russian' },
+                                        { label: 'Polish', value: 'polish' },
                                     ]} />
                             </View>
                             {errors.language && touched.language &&
-                                <Text style={{ fontSize: 12, color: 'red', marginTop: 5 }}>{errors.language}</Text>
+                                <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.language}</Text>
                             }
                             <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
                                 <Text style={{ textAlign: 'center' }}>ADD</Text>
@@ -101,7 +118,8 @@ const AddQuestion: React.FC = () => {
                     </View>
                 )}
             </Formik>
-            <ModalAddQuestion isModalVisibleSignIn={isModalVisibleSignIn} setIsModalVisibleSignIn={setIsModalVisibleSignIn}/>
+            <ModalAddQuestionUnauthorized isModalVisibleSignIn={isModalVisibleSignIn} setIsModalVisibleSignIn={setIsModalVisibleSignIn}/>
+            <ModalQuestionAdded isModalVisibleAdded={isModalVisibleAdded} setIsModalVisibleAdded={setIsModalVisibleAdded}/>
         </KeyboardAvoidingView>
     )
 }
