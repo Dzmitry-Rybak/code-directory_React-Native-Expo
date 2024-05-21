@@ -15,7 +15,6 @@ interface DrawerContentPoprs extends DrawerContentComponentProps {}
 
 const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
     const [filteredQuestions, setFilteredQuestions] = React.useState([]);
-
     const {questions, selectedId, isLogged} = useSelector((state:IRootState) => state.questionsReducer);
     const {filter, repeatQuestion, memorizedQuestions} = useSelector((state) => state.filterReducer);
     
@@ -26,9 +25,6 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
     }
 
     const filterQuestions = (items, filter) => {
-        if(repeatQuestion.length === 0 && filter === 'repeat') {
-            Alert.alert('No questions to repeat yet')
-        }
         switch (filter) {
             case 'repeat':
                 return items.filter((item) => repeatQuestion.includes(item.question_id));
@@ -45,8 +41,8 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
         setFilteredQuestions(filterQuestions(questions, filter));
     }, [questions, filter])
     
-    const renderItem = ({ item }) => (
-        <TouchableOpacity 
+    const renderItem = ({ item }) => {
+        return (<TouchableOpacity 
             onPress={() => {
                     dispatch(questionSelectedId(item.question_id));
                     navigation.closeDrawer();
@@ -58,7 +54,7 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
                 color: getColor(item.question_id, repeatQuestion, memorizedQuestions),
                 textDecorationLine: getTextDecoration(item.question_id, selectedId)}}>{item.question_id}. {item.question}</Text>
         </TouchableOpacity>
-    );
+    )};
 
     return (
         <View style={{padding: 15, flex: 1}}>
@@ -80,11 +76,16 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
                 </View>
                 
             </View>
-            <FlatList
+            {filteredQuestions.length > 0 ? (
+                <FlatList data={filteredQuestions} renderItem={renderItem} keyExtractor={(item) => item.question_id} />
+            ) : (
+                <Text>No questions to display</Text>
+            )}
+            {/* <FlatList
                 data={filteredQuestions}
                 renderItem={renderItem}
                 keyExtractor={item => item.question_id}
-            />
+            /> */}
         </View>
     );
 };

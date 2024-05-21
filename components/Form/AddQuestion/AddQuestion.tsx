@@ -89,6 +89,7 @@ const AddQuestion: React.FC = () => {
                             <View style={styles.picker}>
                                 <RNPickerSelect
                                     onValueChange={programStack => values.stack = programStack}
+                                    useNativeAndroidPickerStyle={false}
                                     items={[
                                         { label: 'JavaScript', value: 'javascript' },
                                         { label: 'React', value: 'react' },
@@ -102,6 +103,7 @@ const AddQuestion: React.FC = () => {
                             <View style={styles.picker}>
                                 <RNPickerSelect
                                     onValueChange={lang => values.language = lang}
+                                    useNativeAndroidPickerStyle={false}
                                     items={[
                                         { label: 'English', value: 'english' },
                                         { label: 'Russian', value: 'russian' },

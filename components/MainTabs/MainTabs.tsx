@@ -51,7 +51,7 @@ const MainTabs:React.FC<IMainTabs> = ({ navigation}) => {
             tabBarActiveTintColor: 'white',
             tabBarInactiveTintColor: 'black',
             headerShown: false,
-            tabBarStyle: { backgroundColor: 'transparent', borderTopWidth: 0 }
+            tabBarStyle: { backgroundColor: 'rgba(61,76,68,1)', borderTopWidth: 1 }
         })}
     >
         <Tab.Screen name="Home">

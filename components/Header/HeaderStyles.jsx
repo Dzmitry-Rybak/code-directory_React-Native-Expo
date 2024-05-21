@@ -15,6 +15,8 @@ export default styles = StyleSheet.create({
     },
     picker: {
         justifyContent: 'center',
-        fontSize: 35
+        fontSize: 35,
+        width: '30%', // Подбираем подходящее значение для ширины
+        alignSelf: 'center',
     }
 })

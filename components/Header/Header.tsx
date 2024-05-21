@@ -20,8 +20,9 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                 </TouchableOpacity>
                 <View style={styles.picker}>
                     <RNPickerSelect
-                                placeholder={{ label: "Coding Stack", value: 'javascript' }}
+                                placeholder={{ label: "Stack", value: 'javascript' }}
                                 onValueChange={(value) => dispatch(stackSelected(value))}
+                                useNativeAndroidPickerStyle={false}
                                 style={{
                                     inputAndroid: {
                                         color: 'white',
@@ -33,7 +34,7 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                                         color: 'white',
                                         fontSize: 16, 
                                         height: '100%',
-                                        width: 100
+                                        width: 105
                                     },
                                     placeholder: { 
                                         color: 'white',
@@ -57,6 +58,7 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                     <RNPickerSelect
                                 placeholder={{ label: "Langugage", value: 'english' }}
                                 onValueChange={(value) => dispatch(languageSelected(value))}
+                                useNativeAndroidPickerStyle={false}
                                 style={{
                                     inputAndroid: {
                                         color: 'white', 
@@ -74,7 +76,7 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                                         color: 'white', 
                                         fontSize: 16,
                                         height: '100%',
-                                        width: 100
+                                        width: '100%'
                                     },
                                     iconContainer: {
                                         top: 10,
