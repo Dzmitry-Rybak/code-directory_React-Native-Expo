@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ReactNative-CodeDirectory",
-    "slug": "ReactNative-CodeDirectory",
+    "name": "CodeDirectory",
+    "slug": "CodeDirectory",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -24,10 +24,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dzmitry_rybak.CodeDirectory",
+      "permissions": [
+        "INTERNET"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "540df94e-30bc-4f76-83d0-0052b303caca"
+      }
     }
   }
 }

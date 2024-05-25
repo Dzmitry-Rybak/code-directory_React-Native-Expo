@@ -15,6 +15,7 @@ const Drawer = createDrawerNavigator();
 
 import { useDispatch, useSelector } from "react-redux";
 import { questionsFetched, isLoggedIn } from "../../redux/actions";
+import { Alert } from "react-native";
 
 const MainComponent = () => {
     const { language, stack, isLogged } = useSelector(stack => stack.questionsReducer);
@@ -28,7 +29,9 @@ const MainComponent = () => {
                 dispatch(questionsFetched(data.data));
                 setIsLoading(false);
             })
-            .catch(err => console.error(err))
+            .catch(err => {
+                Alert.alert('Please try again later.');
+                console.error(err)})
             .finally(() => setIsLoading(false))
     }
 

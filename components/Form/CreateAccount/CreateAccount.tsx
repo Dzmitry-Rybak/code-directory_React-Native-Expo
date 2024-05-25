@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, Platform, TextInput, TouchableOpacity, KeyboardAvoidingView } from "react-native";
+import { View, Text, Platform, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { ModalLogin } from "../../Modal/Modal";
+import { ModalLogin, ModalEmailExists } from "../../Modal/Modal";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useDispatch } from "react-redux";
@@ -16,6 +16,7 @@ const CreateAccount: React.FC = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
+    const [isModalExists, setIsModalExists] = React.useState(false);
 
     const goToSignIn = () => {
         navigation.navigate('LogIn');
@@ -40,20 +41,22 @@ const CreateAccount: React.FC = () => {
                     try {
                         const data = await fetchUser('signup', values);
                         if(data.message === 'Email is already exists') {
-                            console.log('Not Created')
-                            // setEmailExists(true);
+                            setIsModalExists(true);
+                            setTimeout(async () => {
+                                setIsModalExists(false);
+                            }, 3000)
                         } else {
                             setIsModalVisible(true);
                             await AsyncStorage.setItem('login', `${data.user.name}`);
                             await AsyncStorage.setItem('token', `${data.token}`);
                             dispatch(isLoggedIn(true));
-                            // setEmailExists(false);
                             setTimeout(async () => {
                                 setIsModalVisible(false);
                                 navigation.navigate('Home');
                             }, 5000)
                         }
                     } catch(error) {
+                        Alert.alert('Please try again later.')
                         console.error('Error while submitting:', error)
                     }
                 }}
@@ -147,6 +150,7 @@ const CreateAccount: React.FC = () => {
                 </View>)}
             </Formik>
             <ModalLogin isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible}/>
+            <ModalEmailExists isModalExists={isModalExists} setIsModalExists={setIsModalExists}/>
         </KeyboardAvoidingView>
     )
 }

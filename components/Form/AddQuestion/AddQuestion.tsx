@@ -23,7 +23,10 @@ const AddQuestion: React.FC = () => {
             .then(data => {
                 dispatch(questionsFetched(data.data));
             })
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err)
+                Alert.alert('Please try again later.')
+            })
     }
 
     return (
@@ -40,7 +43,7 @@ const AddQuestion: React.FC = () => {
                     }}
                 validationSchema={validSchemaAddQuestion}
                 onSubmit={async (values) => {
-                    try {
+                        try {
                         const data = await postQuestion(values);
                         if (data.message === 'Questions posted successfully') {
                             setIsModalVisibleAdded(true);
@@ -57,9 +60,10 @@ const AddQuestion: React.FC = () => {
                             }
                         } catch(error) {
                             console.error('Error while submitting:', error)
+                            Alert.alert('Please try again later.')
                         } finally {
                             fetchQuestins();
-                    }
+                        }
                 }}
             >
                 {({ handleChange, handleBlur, values, handleSubmit, touched, errors, isValid }) => (

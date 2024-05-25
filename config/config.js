@@ -1,5 +1,5 @@
 const config = {
-    apiUrl:  'http://code-directory.com:5000',
+    apiUrl:  'https://code-directory.com/api/',
     // apiUrl:  'http://192.168.0.112:5002',
     socialLinks: {
         email: 'codedirectoryapp@gmail.com',

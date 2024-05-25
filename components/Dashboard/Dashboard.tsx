@@ -22,8 +22,8 @@ const Dashboard: React.FC = () => {
     }
 
     const handleDelete = async () => {
+        await deleteAccount();
         await AsyncStorage.multiRemove(['login', 'token'])
-        deleteAccount();
         dispatch(isLoggedIn(false));
     }
 
