@@ -15,7 +15,7 @@ interface DrawerContentPoprs extends DrawerContentComponentProps {}
 
 const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
     const [filteredQuestions, setFilteredQuestions] = React.useState([]);
-    const {questions, selectedId, isLogged} = useSelector((state:IRootState) => state.questionsReducer);
+    const {questions, selectedId, isLogged, pickedQuestion} = useSelector((state:IRootState) => state.questionsReducer);
     const {filter, repeatQuestion, memorizedQuestions} = useSelector((state) => state.filterReducer);
     
     const dispatch = useDispatch();
@@ -42,9 +42,11 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
     }, [questions, filter])
     
     const renderItem = ({ item }) => {
+        
         return (<TouchableOpacity 
-            onPress={() => {
-                    dispatch(questionSelectedId(item.question_id));
+            onPress={async () => {
+                    dispatch(questionSelectedId(item.row_num));
+                    // await AsyncStorage.setItem('selectedId', `${item.row_num}`);
                     navigation.closeDrawer();
                 }}>
             <Text style={{
@@ -52,7 +54,7 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
                 fontSize: 17, 
                 fontWeight: 'bold', 
                 color: getColor(item.question_id, repeatQuestion, memorizedQuestions),
-                textDecorationLine: getTextDecoration(item.question_id, selectedId)}}>{item.question_id}. {item.question}</Text>
+                textDecorationLine: getTextDecoration(item.question_id, selectedId)}}>{item.row_num}. {item.question}</Text>
         </TouchableOpacity>
     )};
 
@@ -79,13 +81,8 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
             {filteredQuestions.length > 0 ? (
                 <FlatList data={filteredQuestions} renderItem={renderItem} keyExtractor={(item) => item.question_id} />
             ) : (
-                <Text>No questions to display</Text>
+                <Text style={{fontSize: 20, fontWeight: 'bold', alignSelf: 'center'}}>Empty.. </Text>
             )}
-            {/* <FlatList
-                data={filteredQuestions}
-                renderItem={renderItem}
-                keyExtractor={item => item.question_id}
-            /> */}
         </View>
     );
 };

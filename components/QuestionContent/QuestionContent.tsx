@@ -1,14 +1,12 @@
 import React from "react";
-import { Text, View, TouchableOpacity, Alert } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 
 import { useSelector, useDispatch } from 'react-redux';
 
 import { IRootState } from "../../interfaces/Questions";
 import styles from './QuestionContentStyles';
-import { fetchAnswerData } from "../../service/fetches";
 import { questionSelected, questionSelectedId, repeatData, memorizedData, questionsFetching } from "../../redux/actions";
 import { LoadingAnswer} from "../Loading/Loading";
-
 import { getFilteredQuestions, postFilteredQuestons } from "../../service/fetches";
 
 // import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -19,7 +17,6 @@ const QuestionContent: React.FC = () => {
     const [isModalVisibleExample, setIsModalVisibleExample] = React.useState(false);
     const [isNextDisable, setIsNextDisable] = React.useState(false);
     const [isPrevDisable, setIsPrevDisable] = React.useState(false);
-    const [isLoading, setIsLoading] = React.useState(true);
 
     const {pickedQuestion, selectedId, stack, language, isLogged, questions, isLoadingQuestions} = useSelector((state:IRootState) => state.questionsReducer);
     const { repeatQuestion, memorizedQuestions } = useSelector((state) => state.filterReducer);
@@ -31,15 +28,24 @@ const QuestionContent: React.FC = () => {
         setIsPrevDisable(selectedId === 1);
     }, [selectedId, questions.length]);
 
+    React.useEffect(() => {
+        fetchAnswer();
+    }, [selectedId, isLogged, stack, language]);
+    
+    React.useEffect(() => {
+        fetchAnswer();
+    }, []);
+
+    React.useEffect(() => {
+        fetchAnswer();
+        filtersRequest();
+    }, [isLogged]);
+
     const fetchAnswer = async () => {
-        // setIsLoading(true);
-        dispatch(questionsFetching(true));
-        await fetchAnswerData(selectedId, stack, language)
-        .then(data => {
-            // setIsLoading(false);
-            dispatch(questionsFetching(false));
-            dispatch(questionSelected(data.data[0]))
+        const pickedQ = questions.findIndex(question => {
+            return question.row_num == selectedId
         })
+        dispatch(questionSelected(questions[pickedQ]))
     }
 
     const filtersRequest = async () => {
@@ -57,11 +63,12 @@ const QuestionContent: React.FC = () => {
 
     const handleNextQuestion = () => {
         const nextQuestion = selectedId + 1;
-        dispatch(questionSelectedId(nextQuestion))
-        if(nextQuestion === (questions.length)) {
+        dispatch(questionSelectedId(nextQuestion));
+        if(nextQuestion === questions.length) {
             setIsNextDisable(true);
         }
     }
+    
     const handlePrevQuestion = () => {
         const prevQuestion = selectedId - 1;
         if(prevQuestion === 1) {
@@ -69,23 +76,12 @@ const QuestionContent: React.FC = () => {
         }
         dispatch(questionSelectedId(prevQuestion))
     }
-
-
-
-    React.useEffect(() => {
-        fetchAnswer();
-        filtersRequest();
-    }, [selectedId, isLogged, stack, language]);
-    
-    React.useEffect(() => {
-        fetchAnswer()
-    }, []);
     
     if(isLoadingQuestions){
         return <LoadingAnswer/>
     }
 
-    const onRepeatQuestion = async id => {
+    const onRepeatQuestion = async (id: number) => {
         if(!isNextDisable) handleNextQuestion();
         let updatedRepeatQuestions = [];
         if (repeatQuestion.includes(id)) {
@@ -102,7 +98,7 @@ const QuestionContent: React.FC = () => {
         await postFilteredQuestons(stack, language, 'memorized', updatedMemorizedQuestions);
     }
       
-    const onMemorizedQuestion = async id => {
+    const onMemorizedQuestion = async (id:number) => {
         if(!isNextDisable) handleNextQuestion();
         let updatedMemorizedQuestions = [];
         if (memorizedQuestions.includes(id)) {
@@ -143,10 +139,10 @@ const QuestionContent: React.FC = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.btnFetch}>
-                <TouchableOpacity style={styles.btn} onPress={() => onRepeatQuestion(selectedId)}>
+                <TouchableOpacity style={styles.btn} onPress={() => onRepeatQuestion(pickedQuestion.question_id)}>
                     <Text style={styles.btnText}>REPEAT</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn} onPress={() => onMemorizedQuestion(selectedId)}>
+                <TouchableOpacity style={styles.btn} onPress={() => onMemorizedQuestion(pickedQuestion.question_id)}>
                     <Text style={styles.btnText}>MEMORIZED</Text>
                 </TouchableOpacity>
             </View>

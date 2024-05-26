@@ -4,31 +4,31 @@
     "slug": "CodeDirectory",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#8bb5b3"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "runtimeVersion": {
-      "policy": "sdkVersion"
+      "backgroundColor": "#fff"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#325261"
       },
       "package": "com.dzmitry_rybak.CodeDirectory",
       "permissions": [
         "INTERNET"
       ]
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     },
     "web": {
       "favicon": "./assets/favicon.png"

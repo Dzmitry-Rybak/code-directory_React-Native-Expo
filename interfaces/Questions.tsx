@@ -12,5 +12,5 @@ export interface IRootState {
     },
     stack: string,
     language: string,
-    selectedId: number
+    selectedId: number,
 }

@@ -33,7 +33,7 @@ export const questionSelected = (pickedQuestion) => {
         payload: pickedQuestion
     }
 }
-export const questionSelectedId = (id) => {
+export const questionSelectedId = (id: number) => {
     return {
         type: 'QUESTION_SELECTED_ID',
         payload: id

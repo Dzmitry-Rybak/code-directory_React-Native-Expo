@@ -4,14 +4,30 @@ import { Ionicons } from "@expo/vector-icons";
 import RNPickerSelect from 'react-native-picker-select';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { DrawerActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { languageSelected, stackSelected } from "../../redux/actions";
 
 import styles from './HeaderStyles';
 
 const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
     const dispatch = useDispatch();
+    const { language, stack } = useSelector(stack => stack.questionsReducer);
+
+    React.useEffect(() => {
+        const getStack = async () =>  {
+            const localStack = await AsyncStorage.getItem('stack');
+            const localLanguage = await AsyncStorage.getItem('language');
+            if(localStack) {
+                dispatch(stackSelected(localStack));
+            }
+            if(localLanguage) {
+                dispatch(languageSelected(localLanguage));
+            }
+        };
+        getStack()
+    }, []);
     
     return (
             <View style={styles.headerContainer}>
@@ -20,8 +36,11 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                 </TouchableOpacity>
                 <View style={styles.picker}>
                     <RNPickerSelect
-                                placeholder={{ label: "Stack", value: 'javascript' }}
-                                onValueChange={(value) => dispatch(stackSelected(value))}
+                                placeholder={{ label: "Stack", value: stack }}
+                                onValueChange={async (value) => {
+                                    dispatch(stackSelected(value));
+                                    await AsyncStorage.setItem('stack', value);
+                                }}
                                 useNativeAndroidPickerStyle={false}
                                 style={{
                                     inputAndroid: {
@@ -56,8 +75,11 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                 </View>
                 <View style={styles.picker}>
                     <RNPickerSelect
-                                placeholder={{ label: "Langugage", value: 'english' }}
-                                onValueChange={(value) => dispatch(languageSelected(value))}
+                                placeholder={{ label: "Langugage", value: language }}
+                                onValueChange={async (value) => {
+                                    dispatch(languageSelected(value));
+                                    await AsyncStorage.setItem('language', value);
+                                }}
                                 useNativeAndroidPickerStyle={false}
                                 style={{
                                     inputAndroid: {

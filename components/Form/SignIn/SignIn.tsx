@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 
 import { useDispatch } from "react-redux";
-import { isLoggedIn } from "../../../redux/actions.js";
+import { isLoggedIn } from "../../../redux/actions";
 import {ModalLogin, ModalIncorrect, ModalNoEmail} from "../../Modal/Modal";
 import { fetchUser } from "../../../service/fetches.jsx";
 import { validSchemaSignIn } from "../validSchema.jsx";

@@ -41,39 +41,39 @@ export const questionsReducer = (state = initialState, actions: IQuestionsAction
         case QUESTIONS_FETCHING: {
             return {
                 ...state,
-                isLoadingQuestions: actions.payload
+                isLoadingQuestions: actions.payload as boolean
             }
         }
         case QUESTIONS_FETCHED:
             return {
                 ...state,
-                questions: actions.payload,
-                pickedQuestion: actions.payload[0]
+                questions: actions.payload as IQuestion[],
+                pickedQuestion: (actions.payload as IQuestion[])[0]
             }
         case QUESTION_SELECTED:
             return {
                 ...state,
-                pickedQuestion: actions.payload
+                pickedQuestion: actions.payload as IQuestion
             }
         case QUESTION_SELECTED_ID:
             return {
                 ...state,
-                selectedId: actions.payload
+                selectedId: actions.payload as number
             }
         case LANGUAGE_SELECTED:
             return {
                 ...state,
-                language: actions.payload
+                language: actions.payload as string
             }
         case STACK_SELECTED:
             return {
                 ...state,
-                stack: actions.payload
+                stack: actions.payload as string
             }
         case IS_LOGGED_IN:
             return {
                 ...state,
-                isLogged: actions.payload
+                isLogged: actions.payload as boolean
             }
         default:
             return state;
@@ -91,7 +91,7 @@ export const filterReducer = (state = initialFilterState, actions) => {
         case FILTER: 
             return {
                 ...state,
-                filter: actions.payload,
+                filter: actions.payload as string,
             }
         case REPEAT_QUESTION:
             return {

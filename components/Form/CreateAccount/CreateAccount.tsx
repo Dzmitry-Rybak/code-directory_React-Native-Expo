@@ -6,7 +6,7 @@ import { ModalLogin, ModalEmailExists } from "../../Modal/Modal";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useDispatch } from "react-redux";
-import { isLoggedIn } from "../../../redux/actions.js";
+import { isLoggedIn } from "../../../redux/actions.ts";
 import { Formik } from 'formik';
 import { validSchemaCreateAccount } from "../validSchema.jsx";
 import styles from '../FormStyles.jsx';
