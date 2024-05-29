@@ -3,13 +3,13 @@ import {
     QUESTIONS_FETCHED, 
     QUESTIONS_FETCHING, 
     QUESTION_SELECTED, 
-    LANGUAGE_SELECTED, 
-    STACK_SELECTED, 
+    LANGUAGE_SELECTED_FROM_STORE,
+    STACK_SELECTED_FROM_STORE,
     IS_LOGGED_IN, 
-    QUESTION_SELECTED_ID, 
     FILTER, 
     REPEAT_QUESTION, 
-    MEMORIZED_QUESTIONS } from "./actions";
+    MEMORIZED_QUESTIONS,
+    QUESTION_SELECTED_ID_FROM_STORE } from "./actions";
 
 interface IQuestionsState {
     questions: IQuestion[];
@@ -48,24 +48,24 @@ export const questionsReducer = (state = initialState, actions: IQuestionsAction
             return {
                 ...state,
                 questions: actions.payload as IQuestion[],
-                pickedQuestion: (actions.payload as IQuestion[])[0]
+                // pickedQuestion: (actions.payload as IQuestion[])[0]
             }
         case QUESTION_SELECTED:
             return {
                 ...state,
                 pickedQuestion: actions.payload as IQuestion
             }
-        case QUESTION_SELECTED_ID:
+        case QUESTION_SELECTED_ID_FROM_STORE:
             return {
                 ...state,
                 selectedId: actions.payload as number
             }
-        case LANGUAGE_SELECTED:
+        case LANGUAGE_SELECTED_FROM_STORE:
             return {
                 ...state,
                 language: actions.payload as string
             }
-        case STACK_SELECTED:
+        case STACK_SELECTED_FROM_STORE:
             return {
                 ...state,
                 stack: actions.payload as string

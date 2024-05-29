@@ -27,7 +27,7 @@ const Tab = createBottomTabNavigator();
 interface IMainTabs extends DrawerContentComponentProps {};
 
 const MainTabs:React.FC<IMainTabs> = ({ navigation}) => {
-    const {isLogged} = useSelector(stack => stack.questionsReducer);
+    const {isLogged} = useSelector(state => state.questionsReducer);
 
 
 

@@ -13,22 +13,8 @@ import styles from './HeaderStyles';
 
 const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
     const dispatch = useDispatch();
-    const { language, stack } = useSelector(stack => stack.questionsReducer);
+    const { language, stack } = useSelector(state => state.questionsReducer);
 
-    React.useEffect(() => {
-        const getStack = async () =>  {
-            const localStack = await AsyncStorage.getItem('stack');
-            const localLanguage = await AsyncStorage.getItem('language');
-            if(localStack) {
-                dispatch(stackSelected(localStack));
-            }
-            if(localLanguage) {
-                dispatch(languageSelected(localLanguage));
-            }
-        };
-        getStack()
-    }, []);
-    
     return (
             <View style={styles.headerContainer}>
             <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -38,8 +24,8 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                     <RNPickerSelect
                                 placeholder={{ label: "Stack", value: stack }}
                                 onValueChange={async (value) => {
-                                    dispatch(stackSelected(value));
                                     await AsyncStorage.setItem('stack', value);
+                                    dispatch(stackSelected(value));
                                 }}
                                 useNativeAndroidPickerStyle={false}
                                 style={{
@@ -77,8 +63,8 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                     <RNPickerSelect
                                 placeholder={{ label: "Langugage", value: language }}
                                 onValueChange={async (value) => {
-                                    dispatch(languageSelected(value));
                                     await AsyncStorage.setItem('language', value);
+                                    dispatch(languageSelected(value));
                                 }}
                                 useNativeAndroidPickerStyle={false}
                                 style={{

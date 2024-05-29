@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 
 import { useSelector, useDispatch } from 'react-redux';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IRootState } from "../../interfaces/Questions";
 import styles from './QuestionContentStyles';
 import { questionSelected, questionSelectedId, repeatData, memorizedData, questionsFetching } from "../../redux/actions";
@@ -17,7 +17,7 @@ const QuestionContent: React.FC = () => {
     const [isModalVisibleExample, setIsModalVisibleExample] = React.useState(false);
     const [isNextDisable, setIsNextDisable] = React.useState(false);
     const [isPrevDisable, setIsPrevDisable] = React.useState(false);
-
+    
     const {pickedQuestion, selectedId, stack, language, isLogged, questions, isLoadingQuestions} = useSelector((state:IRootState) => state.questionsReducer);
     const { repeatQuestion, memorizedQuestions } = useSelector((state) => state.filterReducer);
 
@@ -30,22 +30,25 @@ const QuestionContent: React.FC = () => {
 
     React.useEffect(() => {
         fetchAnswer();
-    }, [selectedId, isLogged, stack, language]);
-    
-    React.useEffect(() => {
-        fetchAnswer();
-    }, []);
+    }, [selectedId, isLogged, questions]);
 
     React.useEffect(() => {
-        fetchAnswer();
         filtersRequest();
-    }, [isLogged]);
+    }, [selectedId, isLogged, stack, language]);
 
-    const fetchAnswer = async () => {
+    const fetchAnswer = () => {
         const pickedQ = questions.findIndex(question => {
             return question.row_num == selectedId
         })
         dispatch(questionSelected(questions[pickedQ]))
+
+        if(pickedQ === -1) {
+            (async () => {
+                await AsyncStorage.setItem('selectedId', '1');
+                dispatch(questionSelectedId(1));
+            })();
+        }
+
     }
 
     const filtersRequest = async () => {

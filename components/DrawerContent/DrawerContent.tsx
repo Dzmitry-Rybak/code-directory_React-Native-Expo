@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, TouchableHighlight, Alert } fro
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useSelector, useDispatch } from 'react-redux';
 import { questionSelectedId, filteredQuestion } from '../../redux/actions';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IRootState } from '../../interfaces/Questions';
 import { getTextDecoration, getColor } from './dynamicStyles';
 import styles from './DrawerContentStyles';
@@ -15,7 +15,7 @@ interface DrawerContentPoprs extends DrawerContentComponentProps {}
 
 const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
     const [filteredQuestions, setFilteredQuestions] = React.useState([]);
-    const {questions, selectedId, isLogged, pickedQuestion} = useSelector((state:IRootState) => state.questionsReducer);
+    const {questions, selectedId} = useSelector((state:IRootState) => state.questionsReducer);
     const {filter, repeatQuestion, memorizedQuestions} = useSelector((state) => state.filterReducer);
     
     const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
         return (<TouchableOpacity 
             onPress={async () => {
                     dispatch(questionSelectedId(item.row_num));
-                    // await AsyncStorage.setItem('selectedId', `${item.row_num}`);
+                    await AsyncStorage.setItem('selectedId', `${item.row_num}`);
                     navigation.closeDrawer();
                 }}>
             <Text style={{
@@ -54,7 +54,7 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
                 fontSize: 17, 
                 fontWeight: 'bold', 
                 color: getColor(item.question_id, repeatQuestion, memorizedQuestions),
-                textDecorationLine: getTextDecoration(item.question_id, selectedId)}}>{item.row_num}. {item.question}</Text>
+                textDecorationLine: getTextDecoration(item.row_num, selectedId)}}>{item.row_num}. {item.question}</Text>
         </TouchableOpacity>
     )};
 

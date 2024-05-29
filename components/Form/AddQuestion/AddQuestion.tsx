@@ -15,11 +15,11 @@ import styles from './AddQuestionStyles';
 const AddQuestion: React.FC = () => {
     const [isModalVisibleSignIn, setIsModalVisibleSignIn] = React.useState(false);
     const [isModalVisibleAdded, setIsModalVisibleAdded] = React.useState(false);
-    const { language, stack } = useSelector(stack => stack.questionsReducer);
+    const { language, stack } = useSelector(state => state.questionsReducer);
     const dispatch = useDispatch();
 
     const fetchQuestins = async () => {
-        fetchQuestionsData(stack, language)
+        await fetchQuestionsData(stack, language)
             .then(data => {
                 dispatch(questionsFetched(data.data));
             })

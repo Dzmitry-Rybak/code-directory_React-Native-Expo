@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { loadSelectedSettingsFromAsyncStore } from "../../redux/asyncActions/loadSelectedSettingsFromAsyncStore";
 import MainTabs from "../MainTabs/MainTabs";
 import { Loading } from "../Loading/Loading";
 import DrawerContent from "../DrawerContent/DrawerContent";
@@ -18,22 +19,40 @@ import { questionsFetched, isLoggedIn } from "../../redux/actions";
 import { Alert } from "react-native";
 
 const MainComponent = () => {
-    const { language, stack, isLogged } = useSelector(stack => stack.questionsReducer);
+    const { language, stack, isLogged } = useSelector(state => state.questionsReducer);
     const dispatch = useDispatch();
     
     const [isLoading, setIsLoading] = React.useState(true);
+    const [isAsyncStorageLoaded, setIsAsyncStorageLoaded] = React.useState(false);
 
     const fetchQuestins = async () => {
-        fetchQuestionsData(stack, language)
+        await fetchQuestionsData(stack, language)
             .then(data => {
                 dispatch(questionsFetched(data.data));
                 setIsLoading(false);
             })
             .catch(err => {
                 Alert.alert('Please try again later.');
-                console.error(err)})
-            .finally(() => setIsLoading(false))
+                console.error(err)
+            })
+            .finally(() => setIsLoading(false));
     }
+
+    React.useEffect(() => {
+        const loadSettings = async () => {
+            await dispatch(loadSelectedSettingsFromAsyncStore());
+            setIsAsyncStorageLoaded(true);
+        };
+
+        loadSettings();
+    }, [dispatch]);
+
+    React.useEffect(() => {
+        if (isAsyncStorageLoaded) {
+            fetchQuestins();
+            getUsername();
+        }
+    }, [isAsyncStorageLoaded, language, stack, isLogged]);
 
     const getUsername = async () => {
         const userName = await AsyncStorage.getItem('login');
@@ -44,15 +63,6 @@ const MainComponent = () => {
         }
     }
     
-    React.useEffect(() => {
-        fetchQuestins();
-    }, []);
-    
-    React.useEffect(() => {
-        fetchQuestins();
-        getUsername();
-    }, [language, stack, isLogged]);
-
     if (isLoading) {
         return <Loading />
     }
@@ -67,7 +77,7 @@ const MainComponent = () => {
                     <NavigationContainer
                         theme={{
                             colors: {
-                                background: 'transparent' // Устанавливаем прозрачный фон для навигации
+                                background: 'transparent'
                             }
                         }}>
                         <Drawer.Navigator

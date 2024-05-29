@@ -35,7 +35,7 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps>  = ({ navigation}) => {
-    const { stack, language, isLogged } = useSelector(stack => stack.questionsReducer);
+    const { stack, isLogged } = useSelector(state => state.questionsReducer);
     const [programmingLang, setProgrammingLang] = React.useState(getLanguageData(stack));
     const [name, setName] = React.useState(null);
 
@@ -50,7 +50,7 @@ const Home: React.FC<HomeProps>  = ({ navigation}) => {
 
     React.useEffect(()=> {
         setProgrammingLang(getLanguageData(stack));
-    }, [stack, language])
+    }, [stack])
 
     return (
         <ScrollView style={styles.container}>
@@ -68,7 +68,6 @@ const Home: React.FC<HomeProps>  = ({ navigation}) => {
                     style={{width: 40, height: 40}}></Image>
                 </View>
                 <View style={{alignItems: 'center'}}>
-                    {/* <Text style={{color: 'white', textAlign: 'justify'}}>Here, you'll discover a set of 126 questions and answers, complete with code examples, created to assist you in preparing for your interview and enhance your proficiency in JavaScript. Sign In to save your progress.</Text> */}
                     <Progress/>
                 </View>
                 <QuestionContent/>
