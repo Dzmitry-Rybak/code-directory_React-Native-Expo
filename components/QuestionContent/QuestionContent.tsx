@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Animated } from "react-native";
 
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,47 +9,25 @@ import { questionSelected, questionSelectedId, repeatData, memorizedData, questi
 import { LoadingAnswer} from "../Loading/Loading";
 import { getFilteredQuestions, postFilteredQuestons } from "../../service/fetches";
 
-// import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { ModalExample } from "../Modal/Modal";
+import { ModalExample, ModalPleaseSignUp } from "../Modal/Modal";
 
 
 const QuestionContent: React.FC = () => {
     const [isModalVisibleExample, setIsModalVisibleExample] = React.useState(false);
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
     const [isNextDisable, setIsNextDisable] = React.useState(false);
     const [isPrevDisable, setIsPrevDisable] = React.useState(false);
+    const [isUnauthShowed, setIsUnauthShowed] = React.useState(false);
+
+    const opacity = React.useRef(new Animated.Value(0)).current;
+    const translateY = React.useRef(new Animated.Value(10)).current;
+
+
     
     const {pickedQuestion, selectedId, stack, language, isLogged, questions, isLoadingQuestions} = useSelector((state:IRootState) => state.questionsReducer);
     const { repeatQuestion, memorizedQuestions } = useSelector((state) => state.filterReducer);
 
     const dispatch = useDispatch();
-
-    React.useEffect(() => {
-        setIsNextDisable(selectedId === questions.length);
-        setIsPrevDisable(selectedId === 1);
-    }, [selectedId, questions.length]);
-
-    React.useEffect(() => {
-        fetchAnswer();
-    }, [selectedId, isLogged, questions]);
-
-    React.useEffect(() => {
-        filtersRequest();
-    }, [selectedId, isLogged, stack, language]);
-
-    const fetchAnswer = () => {
-        const pickedQ = questions.findIndex(question => {
-            return question.row_num == selectedId
-        })
-        dispatch(questionSelected(questions[pickedQ]))
-
-        if(pickedQ === -1) {
-            (async () => {
-                await AsyncStorage.setItem('selectedId', '1');
-                dispatch(questionSelectedId(1));
-            })();
-        }
-
-    }
 
     const filtersRequest = async () => {
         await getFilteredQuestions(stack, language).then(req => {
@@ -64,6 +42,75 @@ const QuestionContent: React.FC = () => {
         })
     } 
 
+    React.useEffect(() => {
+        setIsNextDisable(selectedId === questions.length);
+        setIsPrevDisable(selectedId === 1);
+    }, [selectedId, questions.length]);
+
+    React.useEffect(() => {
+        fetchAnswer();
+    }, [selectedId, isLogged, questions]);
+
+    React.useEffect(() => {
+        filtersRequest();
+    }, [isLogged, stack, language]); //selectedId, 
+
+    const fetchAnswer = () => {
+        const pickedQ = questions.findIndex(question => {
+            return question.row_num == selectedId
+        })
+        setTimeout(() => {
+            dispatch(questionSelected(questions[pickedQ]))
+        }, 200)
+
+        if(pickedQ === -1) {
+            (async () => {
+                await AsyncStorage.setItem('selectedId', '1');
+                dispatch(questionSelectedId(1));
+            })();
+        }
+
+    }
+
+    const fadeIn = () => {
+        Animated.parallel([
+            Animated.timing(opacity, {
+                toValue: 1,
+                duration: 1200,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translateY, {
+                toValue: 0,
+                duration: 1200,
+                useNativeDriver: true,
+            })
+        ]).start();
+    };
+    
+    const fadeOut = (callback) => {
+        Animated.parallel([
+            Animated.timing(opacity, {
+                toValue: 0,
+                duration: 400,
+                useNativeDriver: true,
+            }),
+            Animated.timing(translateY, {
+                toValue: 10,
+                duration: 400,
+                useNativeDriver: true,
+            })
+        ]).start(() => {
+            if (callback) callback();
+        });
+    };
+    
+
+    React.useEffect(() => {
+        fadeOut(() => fadeIn());
+    }, [selectedId]);
+    
+
+
     const handleNextQuestion = () => {
         const nextQuestion = selectedId + 1;
         dispatch(questionSelectedId(nextQuestion));
@@ -73,18 +120,30 @@ const QuestionContent: React.FC = () => {
     }
     
     const handlePrevQuestion = () => {
+        
         const prevQuestion = selectedId - 1;
         if(prevQuestion === 1) {
             setIsPrevDisable(true);
         }
         dispatch(questionSelectedId(prevQuestion))
+
     }
+
+
+    const unauthorizedProgress = () => {
+        setIsLoggedIn(true);
+        setIsUnauthShowed(true)
+        setTimeout(() => {
+            setIsLoggedIn(false);
+        }, 5000);
+    };
     
     if(isLoadingQuestions){
         return <LoadingAnswer/>
     }
 
     const onRepeatQuestion = async (id: number) => {
+        if(!isLogged && !isUnauthShowed) unauthorizedProgress();
         if(!isNextDisable) handleNextQuestion();
         let updatedRepeatQuestions = [];
         if (repeatQuestion.includes(id)) {
@@ -94,14 +153,15 @@ const QuestionContent: React.FC = () => {
         }
         
         const updatedMemorizedQuestions = memorizedQuestions.filter(questionId => !updatedRepeatQuestions.includes(questionId));
+        await postFilteredQuestons(stack, language, 'repeat', updatedRepeatQuestions);
+        await postFilteredQuestons(stack, language, 'memorized', updatedMemorizedQuestions);
         dispatch(repeatData(updatedRepeatQuestions));
         dispatch(memorizedData(updatedMemorizedQuestions));
 
-        await postFilteredQuestons(stack, language, 'repeat', updatedRepeatQuestions);
-        await postFilteredQuestons(stack, language, 'memorized', updatedMemorizedQuestions);
     }
-      
+
     const onMemorizedQuestion = async (id:number) => {
+        if(!isLogged && !isUnauthShowed) unauthorizedProgress();
         if(!isNextDisable) handleNextQuestion();
         let updatedMemorizedQuestions = [];
         if (memorizedQuestions.includes(id)) {
@@ -111,11 +171,11 @@ const QuestionContent: React.FC = () => {
         }
 
         const updatedRepeatQuestions = repeatQuestion.filter(questionId => !updatedMemorizedQuestions.includes(questionId));
+        await postFilteredQuestons(stack, language, 'memorized', updatedMemorizedQuestions);
+        await postFilteredQuestons(stack, language, 'repeat', updatedRepeatQuestions);
         dispatch(repeatData(updatedRepeatQuestions));
         dispatch(memorizedData(updatedMemorizedQuestions));
 
-        await postFilteredQuestons(stack, language, 'memorized', updatedMemorizedQuestions);
-        await postFilteredQuestons(stack, language, 'repeat', updatedRepeatQuestions);
     }
     
     if(!pickedQuestion) {
@@ -123,10 +183,18 @@ const QuestionContent: React.FC = () => {
     }
 
     return (
-        <View style={styles.wrapper}>
-            <Text style={{fontWeight: 'bold', fontSize: 15}}>{pickedQuestion.question}</Text>
+        <Animated.View style={{
+            backgroundColor: '#fff',
+            padding: 15,
+            borderRadius: 10,
+            marginTop: 20,
+            flex: 1,
+            marginBottom: 40,
+            opacity,
+            transform: [{translateY}]}}>
+            <Text style={{fontWeight: 'bold', fontSize: 15, }}>{pickedQuestion.row_num}. {pickedQuestion.question}</Text>
             <View style={styles.line}/>
-            <Text style={styles.answer}>{pickedQuestion.answer}</Text>
+            <Text style={{ minHeight: 200, fontSize: 15, }}>{pickedQuestion.answer}</Text>
             <View style={styles.btnWrapper}>
                 <TouchableOpacity style={isPrevDisable ? styles.btnDisabled : styles.btn}  onPress={handlePrevQuestion} disabled={isPrevDisable}>
                     <Text style={styles.btnText}>PREV</Text>
@@ -149,8 +217,9 @@ const QuestionContent: React.FC = () => {
                     <Text style={styles.btnText}>MEMORIZED</Text>
                 </TouchableOpacity>
             </View>
+            <ModalPleaseSignUp isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
             <ModalExample src={pickedQuestion.example_path} isModalVisibleExample={isModalVisibleExample} setIsModalVisibleExample={setIsModalVisibleExample}/>
-        </View>
+        </Animated.View>
     )
 }
 

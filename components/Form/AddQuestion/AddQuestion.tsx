@@ -69,7 +69,7 @@ const AddQuestion: React.FC = () => {
                 {({ handleChange, handleBlur, values, handleSubmit, touched, errors, isValid }) => (
                     <View style={styles.container}>
                         <View style={styles.wrapper}>
-                            <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 28 }}>ADD QUESTIONS 📚</Text>
+                            <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 28, fontFamily: 'Kanit-Bold' }}>ADD QUESTIONS 📚</Text>
                             
                             <TextInput
                                 style={styles.input}
@@ -85,7 +85,6 @@ const AddQuestion: React.FC = () => {
                                 value={values.answer}
                                 onChangeText={handleChange('answer')}
                                 onBlur={handleBlur('answer')}
-                                // multiline - но тогда проблемы со скрытием клавиатуры
                                 placeholder="type answer..." />
                             {errors.answer && touched.answer &&
                                 <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.answer}</Text>

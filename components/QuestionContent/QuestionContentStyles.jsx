@@ -54,9 +54,6 @@ export default styles = StyleSheet.create({
         fontSize: 12,
         color: 'black',
         textAlign: 'center',
+        fontFamily: 'Kanit-Regular'
     },
-    answer: {
-        minHeight: 200,
-        fontSize: 15
-    }
 });

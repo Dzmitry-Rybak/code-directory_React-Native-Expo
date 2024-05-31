@@ -31,21 +31,27 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                                 style={{
                                     inputAndroid: {
                                         color: 'white',
-                                        fontSize: 16, 
+                                        fontSize: 20, 
                                         height: '100%',
-                                        width: 100
+                                        width: 100,
+                                        fontFamily: 'Kanit-Bold',
+                                        textDecorationLine: 'underline'
                                     },
                                     inputIOS: {
                                         color: 'white',
-                                        fontSize: 16, 
+                                        fontSize: 20, 
                                         height: '100%',
-                                        width: 105
+                                        width: 105,
+                                        fontFamily: 'Kanit-Bold',
+                                        textDecorationLine: 'underline'
                                     },
                                     placeholder: { 
                                         color: 'white',
-                                        fontSize: 16, 
+                                        fontSize: 20, 
                                         height: '100%',
-                                        width: 100
+                                        width: 100,
+                                        fontFamily: 'Kanit-Bold',
+                                        textDecorationLine: 'underline'
                                     },
                                     iconContainer: {
                                         top: 10,
@@ -70,21 +76,27 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                                 style={{
                                     inputAndroid: {
                                         color: 'white', 
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         height: '100%',
-                                        width: 100
+                                        width: 100,
+                                        fontFamily: 'Kanit-Bold',
+                                        textDecorationLine: 'underline'
                                     },
                                     inputIOS: {
                                         color: 'white', 
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         height: '100%',
-                                        width: 100
+                                        width: 100,
+                                        fontFamily: 'Kanit-Bold',
+                                        textDecorationLine: 'underline'
                                     },
                                     placeholder: { 
                                         color: 'white', 
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         height: '100%',
-                                        width: '100%'
+                                        width: '100%',
+                                        fontFamily: 'Kanit-Bold',
+                                        textDecorationLine: 'underline'
                                     },
                                     iconContainer: {
                                         top: 10,

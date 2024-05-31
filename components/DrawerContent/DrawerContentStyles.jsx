@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
     },
     filterText: {
         fontSize: 10,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Kanit-Regular'
     }
 })
 

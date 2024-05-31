@@ -70,7 +70,7 @@ const SignIn: React.FC = () => {
             <View style={styles.container}>
                 <View style={styles.wrapper}>
                     <Image source={logo} style={{ width: 120, height: 120, alignSelf: 'center', tintColor: 'gray' }} />
-                    <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 30 }}>Welcome back</Text>
+                    <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 30}}>Welcome back</Text>
                     <Text style={{ textAlign: 'center', marginTop: 5 }}>Sign to continue</Text>
                     <TextInput
                         style={styles.input}

@@ -8,34 +8,42 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { loadSelectedSettingsFromAsyncStore } from "../../redux/asyncActions/loadSelectedSettingsFromAsyncStore";
 import MainTabs from "../MainTabs/MainTabs";
-import { Loading } from "../Loading/Loading";
+// import { Loading } from "../Loading/Loading";
 import DrawerContent from "../DrawerContent/DrawerContent";
 import { fetchQuestionsData } from "../../service/fetches";
+
+import { useFonts } from 'expo-font';
 
 const Drawer = createDrawerNavigator();
 
 import { useDispatch, useSelector } from "react-redux";
 import { questionsFetched, isLoggedIn } from "../../redux/actions";
 import { Alert } from "react-native";
+import SplashScreen from "../SplashScreenView";
 
 const MainComponent = () => {
     const { language, stack, isLogged } = useSelector(state => state.questionsReducer);
     const dispatch = useDispatch();
+
+    let [fontsLoaded] = useFonts({
+        'Kanit-Bold': require('../../assets/fonts/Kanit-Bold.ttf'),
+        'Kanit-Regular': require('../../assets/fonts/Kanit-Regular.ttf'),
+      });
     
-    const [isLoading, setIsLoading] = React.useState(true);
+    // const [isLoading, setIsLoading] = React.useState(true);
     const [isAsyncStorageLoaded, setIsAsyncStorageLoaded] = React.useState(false);
 
     const fetchQuestins = async () => {
         await fetchQuestionsData(stack, language)
             .then(data => {
                 dispatch(questionsFetched(data.data));
-                setIsLoading(false);
+                // setIsLoading(false);
             })
             .catch(err => {
                 Alert.alert('Please try again later.');
                 console.error(err)
             })
-            .finally(() => setIsLoading(false));
+            // .finally(() => setIsLoading(false));
     }
 
     React.useEffect(() => {
@@ -63,9 +71,9 @@ const MainComponent = () => {
         }
     }
     
-    if (isLoading) {
-        return <Loading />
-    }
+    // if (isLoading) {
+    //     return <Loading />
+    // }
 
     return (
         <SafeAreaProvider>
@@ -81,6 +89,7 @@ const MainComponent = () => {
                             }
                         }}>
                         <Drawer.Navigator
+                            initialRouteName="Splash"
                             drawerContent={(props) => <DrawerContent {...props} />}
                             screenOptions={{
                                 headerShown: false,
@@ -89,6 +98,9 @@ const MainComponent = () => {
                                     width: '80%',
                                 },
                             }}>
+                            <Drawer.Screen 
+                                name="Splash"
+                                component={SplashScreen}/>
                             <Drawer.Screen
                                 name="Questions"
                                 children={(props) => <MainTabs {...props} />} />

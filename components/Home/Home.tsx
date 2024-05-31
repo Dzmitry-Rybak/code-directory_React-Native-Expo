@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import QuestionContent from "../QuestionContent/QuestionContent";
 import styles from './HomeStyles.jsx';
 import Progress from "../Progress/Progress";
-// @ts-ignore
+
 import js from '../../assets/languages/javascript.png';
 import git from '../../assets/languages/git.png';
 import react from '../../assets/languages/react.png';
@@ -58,7 +58,7 @@ const Home: React.FC<HomeProps>  = ({ navigation}) => {
             <View style={{paddingHorizontal: 15}}>
                 {name ? 
                     <View style={{borderWidth: 1, borderColor: '#77b18d', borderRadius: 10, alignSelf: 'flex-start', margin: 5}}>
-                        <Text style={{fontSize: 15, fontWeight: 'bold', color: '#77b18d', padding: 5 }}>Hi, {name} 👋</Text>
+                        <Text style={{fontSize: 18, fontWeight: 'bold', color: '#77b18d', padding: 5 }}>Hi, {name} 👋</Text>
                     </View>
                 : null }
                 <View style={{flexDirection: 'row', marginBottom: 15, alignItems: 'center', justifyContent: 'center'}}>

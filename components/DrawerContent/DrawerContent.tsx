@@ -50,7 +50,7 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
                     navigation.closeDrawer();
                 }}>
             <Text style={{
-                marginTop: 15, 
+                marginTop: 10, 
                 fontSize: 17, 
                 fontWeight: 'bold', 
                 color: getColor(item.question_id, repeatQuestion, memorizedQuestions),

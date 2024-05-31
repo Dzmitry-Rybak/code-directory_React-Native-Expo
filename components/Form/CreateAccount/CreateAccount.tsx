@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { ModalLogin, ModalEmailExists } from "../../Modal/Modal";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { Linking } from "react-native";
 import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../../../redux/actions.ts";
 import { Formik } from 'formik';
@@ -20,6 +20,10 @@ const CreateAccount: React.FC = () => {
 
     const goToSignIn = () => {
         navigation.navigate('LogIn');
+    }
+
+    const hangleOpenTerms = () => {
+        Linking.openURL(`https://code-directory.com/Terms-and-Conditions_code-directory_Jen24.pdf`)
     }
 
     return (
@@ -131,10 +135,11 @@ const CreateAccount: React.FC = () => {
                             size={20}
                             fillColor="black"
                             iconStyle={{ borderColor: "black" }}
-                            // textStyle={{ fontFamily: "JosefinSans-Regular" }}
                             onPress={(isChecked: boolean) => {values.terms = isChecked}}
                         />
-                        <Text>I confirm that I've read and I agree to the site's Terms & Conditions*</Text>
+                        <TouchableOpacity onPress={hangleOpenTerms}>
+                            <Text style={{textDecorationLine: 'underline'}}>I confirm that I've read and I agree to the site's Terms & Conditions*</Text>
+                        </TouchableOpacity>
                     </View>
                     {errors.terms && touched.terms &&
                             <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.terms}</Text>

@@ -33,13 +33,12 @@ const MainTabs:React.FC<IMainTabs> = ({ navigation}) => {
 
     return (
         <Tab.Navigator
-        // options={{ tabBarLabel: () => null }} - не помню что это!
         screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
                 let iconName: Icons;
                 if(route.name === 'Home') {
                     iconName = focused ? Icons.HOME : Icons.HOME_OUTLINE
-                } else if(route.name === 'AddQuestion') {
+                } else if(route.name === 'Add Question') {
                     iconName = focused ? Icons.CREATE : Icons.CREATE_OUTLINE
                 } else if(route.name === 'SignIn') {
                     iconName = focused ? Icons.PERSON : Icons.PERSON_OUTLINE
@@ -49,6 +48,7 @@ const MainTabs:React.FC<IMainTabs> = ({ navigation}) => {
                 return <Ionicons name={iconName} size={size} color={color}/>
             },
             tabBarActiveTintColor: 'white',
+            
             tabBarInactiveTintColor: 'black',
             headerShown: false,
             tabBarStyle: { backgroundColor: 'rgba(61,76,68,1)', borderTopWidth: 1 }
@@ -57,7 +57,7 @@ const MainTabs:React.FC<IMainTabs> = ({ navigation}) => {
         <Tab.Screen name="Home">
             {() => <Home navigation={navigation}/>}
         </Tab.Screen>
-        <Tab.Screen name="AddQuestion" component={AddQuestion}/>
+        <Tab.Screen name="Add Question" component={AddQuestion}/>
         {isLogged ? (
             <Tab.Screen name="Account" component={Dashboard}/>
         ): (

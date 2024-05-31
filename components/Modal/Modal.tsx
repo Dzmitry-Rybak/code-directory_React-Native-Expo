@@ -225,6 +225,7 @@ export const ModalEmailExists = ({isModalExists, setIsModalExists}) => {
     </View>
   ); 
 }
+
 export const ModalError = ({isError, setIsError}) => {
   return (
     <View>
@@ -250,6 +251,38 @@ export const ModalError = ({isError, setIsError}) => {
                   }
                 }/>
                 <Text style={{fontSize: 20, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>Error, please try again later.</Text>
+                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+            </View>
+        </Modal>
+    </View>
+  ); 
+}
+
+export const ModalPleaseSignUp = ({isLoggedIn, setIsLoggedIn}) => {
+  return (
+    <View>
+        <Modal 
+          isVisible={isLoggedIn}
+          onSwipeComplete={() => setIsLoggedIn(false)}
+          swipeDirection="down"
+          customBackdrop={
+            <TouchableWithoutFeedback onPress={() => setIsLoggedIn(false)}>
+              <View style={{ flex: 1, backgroundColor: '#000000' }} />
+            </TouchableWithoutFeedback>
+          }
+          style={{ justifyContent: 'flex-end', margin: 0, }}>
+            <View style={{ backgroundColor: '#e4af1e', padding: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
+                <View style={
+                  {
+                    position: 'absolute',
+                    top: 10,
+                    width: 40,
+                    height: 7,
+                    backgroundColor: 'gray',
+                    borderRadius: 10 / 2
+                  }
+                }/>
+                <Text style={{fontSize: 20, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>To unlock the ability to save your progress, simply log in.</Text>
                 <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
             </View>
         </Modal>

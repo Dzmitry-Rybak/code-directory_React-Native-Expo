@@ -48,7 +48,6 @@ export const questionsReducer = (state = initialState, actions: IQuestionsAction
             return {
                 ...state,
                 questions: actions.payload as IQuestion[],
-                // pickedQuestion: (actions.payload as IQuestion[])[0]
             }
         case QUESTION_SELECTED:
             return {

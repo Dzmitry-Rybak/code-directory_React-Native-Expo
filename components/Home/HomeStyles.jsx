@@ -11,5 +11,6 @@ export default styles = StyleSheet.create({
         fontSize: 30,
         color: 'white',
         marginRight: 15,
+        fontFamily: 'Kanit-Bold'
     }
 });

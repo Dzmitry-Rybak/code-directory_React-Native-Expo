@@ -14,7 +14,7 @@ const Progress: React.FC = () => {
 
     return (
         <View style={styles.wrapper}>
-            <Text style={{color: 'white', fontSize: 18}}>Progress:</Text>
+            <Text style={{color: 'white', fontSize: 19, fontFamily: 'Kanit-Bold'}}>Progress:</Text>
             <View style={styles.scaleWrap}>
                 <View style={{
                     position: 'absolute',
@@ -28,7 +28,8 @@ const Progress: React.FC = () => {
             </View>
             <Text style={{
                 color: 'white',
-                fontSize: 18,
+                fontSize: 19,
+                fontFamily: 'Kanit-Regular'
             }}>{memorizedQuestions.length}/{questions.length}</Text>
         </View>
     )
