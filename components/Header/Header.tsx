@@ -1,5 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import RNPickerSelect from 'react-native-picker-select';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
@@ -13,9 +14,17 @@ import styles from './HeaderStyles';
 
 const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
     const dispatch = useDispatch();
-    const { language, stack } = useSelector(state => state.questionsReducer);
+    const { language, stack, isLogged } = useSelector(state => state.questionsReducer);
+
+    let pickerStack = [
+        { label: 'JavaScript', value: 'javascript' },
+        { label: 'React', value: 'react' },
+        { label: 'Git', value: 'git' },
+        { label: 'Python', value: 'python' },
+    ]
 
     return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent', position: 'relative' }}>
             <View style={styles.headerContainer}>
             <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
                     <Ionicons name="menu" size={30}/>                
@@ -33,7 +42,7 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                                         color: 'white',
                                         fontSize: 20, 
                                         height: '100%',
-                                        width: 100,
+                                        width: '100%',
                                         fontFamily: 'Kanit-Bold',
                                         textDecorationLine: 'underline'
                                     },
@@ -58,12 +67,7 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                                         right: 12,
                                     },
                                 }}
-                                items={[
-                                    { label: 'JavaScript', value: 'javascript' },
-                                    { label: 'React', value: 'react' },
-                                    { label: 'Git', value: 'git' },
-                                    { label: 'Python', value: 'python' },
-                                ]}/>
+                                items={pickerStack}/>
                 </View>
                 <View style={styles.picker}>
                     <RNPickerSelect
@@ -110,6 +114,8 @@ const Header: React.FC<DrawerContentComponentProps> = ({navigation}) => {
                                 ]}/>
                 </View>
             </View>
+        </SafeAreaView>
+            
     )
 }
 

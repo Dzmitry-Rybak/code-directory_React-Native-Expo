@@ -135,12 +135,24 @@ export const ModalExample = ({isModalVisibleExample, setIsModalVisibleExample, s
           animationOut='bounceOutRight'
           backdropOpacity={0.91}
           style={{ justifyContent: 'flex-end', margin: 0 }}>
-            <View style={{ backgroundColor: 'transparent', padding: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{ flex: 1, backgroundColor: 'transparent', padding: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
                 <Image
                   source={{ uri: `https://code-directory.com/${src}` }}
                   style={{ width: screenWidth, height: screenHeight }}
                   resizeMode="contain"
                   />
+                <TouchableWithoutFeedback  onPress={() => setIsModalVisibleExample(false)}>
+                  <Text
+                  style={{
+                    position: 'absolute',
+                    bottom: 100,
+                    left: '50%',
+                    color: '#c57676',
+                    padding: 5,
+                    borderWidth: 2,
+                    borderColor: '#b56c6c'
+                  }}>Close example</Text>
+                </TouchableWithoutFeedback>
             </View>
         </Modal>
     </View>

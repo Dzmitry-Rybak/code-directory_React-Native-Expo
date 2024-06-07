@@ -22,7 +22,7 @@ const QuestionContent: React.FC = () => {
     const opacity = React.useRef(new Animated.Value(0)).current;
     const translateY = React.useRef(new Animated.Value(10)).current;
 
-
+    const [isAsyncStorageLoaded, setIsAsyncStorageLoaded] = React.useState(false);
     
     const {pickedQuestion, selectedId, stack, language, isLogged, questions, isLoadingQuestions} = useSelector((state:IRootState) => state.questionsReducer);
     const { repeatQuestion, memorizedQuestions } = useSelector((state) => state.filterReducer);

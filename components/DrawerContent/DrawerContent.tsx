@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useSelector, useDispatch } from 'react-redux';
 import { questionSelectedId, filteredQuestion } from '../../redux/actions';
@@ -59,31 +60,34 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
     )};
 
     return (
-        <View style={{padding: 15, flex: 1}}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15}}>
-                <View>
-                    <TouchableOpacity style={styles.filterBtn} onPress={() => filterSelected('remaining')}>
-                        <Text style={styles.filterText}>REMAINING QUESTIONS</Text>
-                    </TouchableOpacity>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#6a8c94', position: 'relative' }}>
+            <View style={{padding: 15, flex: 1}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15}}>
+                    <View>
+                        <TouchableOpacity style={styles.filterBtn} onPress={() => filterSelected('remaining')}>
+                            <Text style={styles.filterText}>REMAINING QUESTIONS</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <TouchableOpacity style={styles.filterBtn} onPress={() => filterSelected('repeat')}>
+                            <Text style={styles.filterText}>QUESTIONS TO REPEAT</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <TouchableOpacity style={styles.filterBtn} onPress={() => filterSelected('all')}>
+                            <Text style={styles.filterText}>ALL QUESTIONS</Text>
+                        </TouchableOpacity>
+                    </View>
+                    
                 </View>
-                <View>
-                    <TouchableOpacity style={styles.filterBtn} onPress={() => filterSelected('repeat')}>
-                        <Text style={styles.filterText}>QUESTIONS TO REPEAT</Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity style={styles.filterBtn} onPress={() => filterSelected('all')}>
-                        <Text style={styles.filterText}>ALL QUESTIONS</Text>
-                    </TouchableOpacity>
-                </View>
-                
+                {filteredQuestions.length > 0 ? (
+                    <FlatList data={filteredQuestions} renderItem={renderItem} keyExtractor={(item) => item.question_id} />
+                ) : (
+                    <Text style={{fontSize: 20, fontWeight: 'bold', alignSelf: 'center'}}>Empty.. </Text>
+                )}
             </View>
-            {filteredQuestions.length > 0 ? (
-                <FlatList data={filteredQuestions} renderItem={renderItem} keyExtractor={(item) => item.question_id} />
-            ) : (
-                <Text style={{fontSize: 20, fontWeight: 'bold', alignSelf: 'center'}}>Empty.. </Text>
-            )}
-        </View>
+        </SafeAreaView>
+        
     );
 };
 

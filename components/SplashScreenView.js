@@ -1,9 +1,16 @@
 import React from "react";
 import { Image, StyleSheet, Text, View, Animated } from "react-native";
+import { useFonts } from 'expo-font';
+
 
 import icon from '../assets/logo_lavanda.png';
 
 const SplashScreen = ({ navigation }) => {
+
+    let [fontsLoaded] = useFonts({
+        'Kanit-Bold': require('../assets/fonts/Kanit-Bold.ttf'),
+        'Kanit-Regular': require('../assets/fonts/Kanit-Regular.ttf'),
+      });
 
     const fadeAnim = React.useRef(new Animated.Value(0)).current;
     const moveAnim = React.useRef(new Animated.Value(100)).current; 

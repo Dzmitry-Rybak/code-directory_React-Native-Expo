@@ -1,18 +1,13 @@
 import React from "react";
 import { View, Text, ActivityIndicator } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
 
 export const Loading: React.FC = () => {
     return (
-      <LinearGradient
-        colors={['rgba(50,82,97,1)', 'rgba(61,76,68,1)']} 
-            style={{ flex: 1 }}
-        >
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ActivityIndicator size="large"/> 
-          <Text style={{marginTop: 10, fontSize: 18, color: 'white'}}>Loading...</Text>
+          <Text>Сделать скелетон</Text>
+          {/* Сделать СКЕЛЕТОН */}
         </View>
-        </LinearGradient>
       )
 }
 

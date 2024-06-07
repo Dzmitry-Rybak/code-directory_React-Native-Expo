@@ -34,11 +34,62 @@ interface HomeProps {
     navigation: StackNavigationProp<any>;
 }
 
-const Home: React.FC<HomeProps>  = ({ navigation}) => {
-    const { stack, isLogged } = useSelector(state => state.questionsReducer);
-    const [programmingLang, setProgrammingLang] = React.useState(getLanguageData(stack));
-    const [name, setName] = React.useState(null);
+import { useDispatch } from "react-redux";
+import { questionsFetched, isLoggedIn } from "../../redux/actions";
+import { Alert } from "react-native";
+import { loadSelectedSettingsFromAsyncStore } from "../../redux/asyncActions/loadSelectedSettingsFromAsyncStore";
+import { Loading } from "../Loading/Loading";
+import { fetchQuestionsData } from "../../service/fetches";
 
+const Home: React.FC<HomeProps>  = ({ navigation}) => {
+    const { stack, isLogged, language } = useSelector(state => state.questionsReducer);
+    const [programmingLang, setProgrammingLang] = React.useState(getLanguageData(stack));
+    const dispatch = useDispatch();
+
+    const [name, setName] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [isAsyncStorageLoaded, setIsAsyncStorageLoaded] = React.useState(false);
+
+    const fetchQuestins = async () => {
+        setIsLoading(true)
+        await fetchQuestionsData(stack, language)
+            .then(data => {
+                dispatch(questionsFetched(data.data));
+                setIsLoading(false);
+            })
+            .catch(err => {
+                Alert.alert('Please try again later.');
+                console.error(err)
+            })
+            .finally(() => setIsLoading(false));
+    }
+
+    React.useEffect(() => {
+        const loadSettings = async () => {
+            await dispatch(loadSelectedSettingsFromAsyncStore());
+            setIsAsyncStorageLoaded(true);
+        };
+
+        loadSettings();
+    }, [dispatch]);
+
+    const getUsername = async () => {
+        const userName = await AsyncStorage.getItem('login');
+        if (userName) {
+            dispatch(isLoggedIn(true))
+        } else {
+            dispatch(isLoggedIn(false))
+        }
+    }
+
+    React.useEffect(() => {
+        if (isAsyncStorageLoaded) {
+            fetchQuestins();
+            getUsername();
+        }
+    }, [isAsyncStorageLoaded, language, stack, isLogged]);
+
+    
     const getName = async () => {
         const userName = await AsyncStorage.getItem('login');
         setName(userName);
@@ -52,26 +103,34 @@ const Home: React.FC<HomeProps>  = ({ navigation}) => {
         setProgrammingLang(getLanguageData(stack));
     }, [stack])
 
+    // if (isLoading) {
+    //     return <Loading />
+    // } else {
+
+    // }
+
     return (
         <ScrollView style={styles.container}>
             <Header navigation={navigation}/>
-            <View style={{paddingHorizontal: 15}}>
-                {name ? 
-                    <View style={{borderWidth: 1, borderColor: '#77b18d', borderRadius: 10, alignSelf: 'flex-start', margin: 5}}>
-                        <Text style={{fontSize: 18, fontWeight: 'bold', color: '#77b18d', padding: 5 }}>Hi, {name} 👋</Text>
+            {isLoading ? <Loading/> : (
+                <View style={{paddingHorizontal: 15}}>
+                    {name ? 
+                        <View style={{borderWidth: 1, borderColor: '#77b18d', borderRadius: 10, alignSelf: 'flex-start', margin: 5}}>
+                            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#77b18d', padding: 5 }}>Hi, {name} 👋</Text>
+                        </View>
+                    : null }
+                    <View style={{flexDirection: 'row', marginBottom: 15, alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style={styles.langugage}>{programmingLang.name}</Text>
+                        <Image 
+                        source={programmingLang.url}
+                        style={{width: 40, height: 40}}></Image>
                     </View>
-                : null }
-                <View style={{flexDirection: 'row', marginBottom: 15, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={styles.langugage}>{programmingLang.name}</Text>
-                    <Image 
-                    source={programmingLang.url}
-                    style={{width: 40, height: 40}}></Image>
+                    <View style={{alignItems: 'center'}}>
+                        <Progress/>
+                    </View>
+                    <QuestionContent/>
                 </View>
-                <View style={{alignItems: 'center'}}>
-                    <Progress/>
-                </View>
-                <QuestionContent/>
-            </View>
+            )}
         </ScrollView>
         
     )
