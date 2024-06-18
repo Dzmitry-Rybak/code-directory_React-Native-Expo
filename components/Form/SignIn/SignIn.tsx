@@ -1,25 +1,29 @@
 import React from "react";
-import { Button, View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { Formik } from 'formik';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
 
 import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../../../redux/actions";
-import {ModalLogin, ModalIncorrect, ModalNoEmail} from "../../Modal/Modal";
-import { fetchUser } from "../../../service/fetches.jsx";
+import {ModalLogin, ModalIncorrect, ModalNoEmail, ModalError} from "../../Modal/Modal";
+
 import { validSchemaSignIn } from "../validSchema.jsx";
 import styles from '../FormStyles.jsx';
 import logo from '../../../assets/logo.png';
 
+import useCodeDirService from "../../../service/CodeDirectoryService";
+
 const SignIn: React.FC = () => {
+    const {fetchUser} = useCodeDirService();
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [isModalIncorrect, setIsModalIncorrect] = React.useState(false);
     const [isModalNoEmail, setIsModalNoEmail] = React.useState(false);
-
+    const [isError, setIsError] = React.useState(false);
+    
     
     const goToCreateAccount = () => {
         navigation.navigate('CreateAccount');
@@ -30,6 +34,7 @@ const SignIn: React.FC = () => {
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
+            <ModalError isError={isError} setIsError={setIsError}/>
             <Formik
                 initialValues={{ 
                         email: '',
@@ -39,7 +44,7 @@ const SignIn: React.FC = () => {
                 onSubmit={async (values) => {
                     try {
                         const data = await fetchUser('signin', values);
-                        
+                        setIsError(false)
                         if (data.message === 'sign in succesfull') {
                             setIsModalVisible(true);
                             values.email = '';
@@ -62,7 +67,7 @@ const SignIn: React.FC = () => {
                             }, 4000)
                         }
                     } catch(error) {
-                        Alert.alert('Error while submitting', 'please, try later');
+                        setIsError(true);
                     }
                 }}
             >
@@ -75,10 +80,12 @@ const SignIn: React.FC = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="EMAIL" 
+                        placeholderTextColor="#b0b0b0"
                         onChangeText={handleChange('email')}
                         onBlur={handleBlur('email')}
                         value={values.email}
                         keyboardType="email-address"
+                        autoCapitalize="none" 
                     />
                     {errors.email && touched.email &&
                         <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.email}</Text>
@@ -87,10 +94,12 @@ const SignIn: React.FC = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="PASSWORD" 
+                        placeholderTextColor="#b0b0b0"
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
                         value={values.password}
                         secureTextEntry={true}
+                        autoCapitalize="none"
                     />
                     {errors.password && touched.password &&
                         <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.password}</Text>

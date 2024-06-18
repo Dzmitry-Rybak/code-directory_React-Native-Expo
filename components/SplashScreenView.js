@@ -1,11 +1,13 @@
 import React from "react";
 import { Image, StyleSheet, Text, View, Animated } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
+import { StatusBar } from "react-native";
 
 
 import icon from '../assets/logo_lavanda.png';
 
-const SplashScreen = ({ navigation }) => {
+const SplashScreen = () => {
 
     let [fontsLoaded] = useFonts({
         'Kanit-Bold': require('../assets/fonts/Kanit-Bold.ttf'),
@@ -45,25 +47,31 @@ const SplashScreen = ({ navigation }) => {
             ).start();
         }, 2700);
 
-        setTimeout(() => {
-            navigation.navigate('Questions');
-        }, 3000);
+        // setTimeout(() => {
+        //     navigation.navigate('Questions');
+        // }, 3000);
 
-    }, [fadeAnim, moveAnim, navigation]);
+    }, [fadeAnim, moveAnim]);
 
     return (
-        <View style={styles.container}>
-            <Animated.View style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                opacity: fadeAnim,
-                transform: [{ translateY: moveAnim }] 
-            }}>
-                <Image source={icon} style={styles.image} />
-                <Text style={{ fontSize: 40, fontWeight: 'bold', color: '#dbdbff', fontFamily: 'Kanit-Bold' }}>Code-Directory</Text>
-            </Animated.View>
-        </View>
+        <LinearGradient
+            colors={['rgba(50,82,97,1)', 'rgba(61,76,68,1)']}
+            style={{ height: '100%', flex: 1 }}
+        >
+            <View style={styles.container}>
+                <Animated.View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    opacity: fadeAnim,
+                    transform: [{ translateY: moveAnim }] 
+                }}>
+                    <StatusBar animated={true} backgroundColor="#325261"/>
+                    <Image source={icon} style={styles.image} />
+                    <Text style={{ fontSize: 40, fontWeight: 'bold', color: '#dbdbff', fontFamily: 'Kanit-Bold' }}>Code-Directory</Text>
+                </Animated.View>
+            </View>
+        </LinearGradient>
     );
 }
 
@@ -74,6 +82,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
         left: 0,
+        flex: 1,
         backgroundColor: 'transparent',
     },
     image: {

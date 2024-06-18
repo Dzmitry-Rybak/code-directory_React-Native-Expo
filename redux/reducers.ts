@@ -9,7 +9,8 @@ import {
     FILTER, 
     REPEAT_QUESTION, 
     MEMORIZED_QUESTIONS,
-    QUESTION_SELECTED_ID_FROM_STORE } from "./actions";
+    QUESTION_SELECTED_ID_FROM_STORE,
+    PICKER_STACK_RENDER} from "./actions";
 
 interface IQuestionsState {
     questions: IQuestion[];
@@ -18,7 +19,8 @@ interface IQuestionsState {
     language: string,
     stack: string,
     isLogged: boolean,
-    isLoadingQuestions: boolean
+    isLoadingQuestions: boolean,
+    isCodeAdded: boolean,
 }
 
 interface IQuestionsActions {
@@ -33,7 +35,8 @@ const initialState: IQuestionsState = {
     stack: 'javascript',
     selectedId: 1,
     isLogged: false,
-    isLoadingQuestions: false
+    isLoadingQuestions: false,
+    isCodeAdded: false,
 };
 
 export const questionsReducer = (state = initialState, actions: IQuestionsActions) => {
@@ -53,6 +56,11 @@ export const questionsReducer = (state = initialState, actions: IQuestionsAction
             return {
                 ...state,
                 pickedQuestion: actions.payload as IQuestion
+            }
+        case PICKER_STACK_RENDER:
+            return {
+                ...state,
+                isCodeAdded: actions.payload as boolean
             }
         case QUESTION_SELECTED_ID_FROM_STORE:
             return {

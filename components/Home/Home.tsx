@@ -1,23 +1,32 @@
 import React from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Skeleton } from 'moti/skeleton';
 
 import QuestionContent from "../QuestionContent/QuestionContent";
 import styles from './HomeStyles.jsx';
 import Progress from "../Progress/Progress";
+import Header from "../Header/Header";
+import { ModalError } from "../Modal/Modal";
 
 import js from '../../assets/languages/javascript.png';
 import git from '../../assets/languages/git.png';
 import react from '../../assets/languages/react.png';
 import python from '../../assets/languages/python.png';
-import Header from "../Header/Header";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import codedir from '../../assets/logo.png'
 
+import { questionsFetched, isLoggedIn } from "../../redux/actions";
+import { loadSelectedSettingsFromAsyncStore } from "../../redux/asyncActions/loadSelectedSettingsFromAsyncStore";
+
+interface HomeProps {
+    navigation: StackNavigationProp<any>;
+}
 
 const getLanguageData = (stack: string) => {
     stack = stack.toLowerCase();
-  
+
     switch (stack) {
         case 'react':
             return { name: 'React', url: react};
@@ -25,25 +34,21 @@ const getLanguageData = (stack: string) => {
             return { name: 'Git', url: git };
         case 'python':
             return { name: 'Python', url: python };
-        default:
+        case 'javascript':
             return { name: 'JavaScript', url: js };
+        default:
+            return { name: stack, url: codedir };
     }
 };
 
-interface HomeProps {
-    navigation: StackNavigationProp<any>;
-}
-
-import { useDispatch } from "react-redux";
-import { questionsFetched, isLoggedIn } from "../../redux/actions";
-import { Alert } from "react-native";
-import { loadSelectedSettingsFromAsyncStore } from "../../redux/asyncActions/loadSelectedSettingsFromAsyncStore";
-import { Loading } from "../Loading/Loading";
-import { fetchQuestionsData } from "../../service/fetches";
+import useCodeDirService from "../../service/CodeDirectoryService";
 
 const Home: React.FC<HomeProps>  = ({ navigation}) => {
+    const {fetchQuestionsData} = useCodeDirService()
+
     const { stack, isLogged, language } = useSelector(state => state.questionsReducer);
     const [programmingLang, setProgrammingLang] = React.useState(getLanguageData(stack));
+    const [isError, setIsError] = React.useState(false);
     const dispatch = useDispatch();
 
     const [name, setName] = React.useState(null);
@@ -56,12 +61,13 @@ const Home: React.FC<HomeProps>  = ({ navigation}) => {
             .then(data => {
                 dispatch(questionsFetched(data.data));
                 setIsLoading(false);
+                setIsError(false)
             })
             .catch(err => {
-                Alert.alert('Please try again later.');
+                setIsError(true)
                 console.error(err)
             })
-            .finally(() => setIsLoading(false));
+            
     }
 
     React.useEffect(() => {
@@ -103,35 +109,45 @@ const Home: React.FC<HomeProps>  = ({ navigation}) => {
         setProgrammingLang(getLanguageData(stack));
     }, [stack])
 
-    // if (isLoading) {
-    //     return <Loading />
-    // } else {
-
-    // }
-
     return (
-        <ScrollView style={styles.container}>
-            <Header navigation={navigation}/>
-            {isLoading ? <Loading/> : (
-                <View style={{paddingHorizontal: 15}}>
-                    {name ? 
-                        <View style={{borderWidth: 1, borderColor: '#77b18d', borderRadius: 10, alignSelf: 'flex-start', margin: 5}}>
-                            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#77b18d', padding: 5 }}>Hi, {name} 👋</Text>
+            <ScrollView style={styles.container}>
+                    <Header navigation={navigation}/>
+                
+                    <View style={{paddingHorizontal: 15}}>
+                        {name ? 
+                            <View style={{borderWidth: 1, borderColor: '#77b18d', borderRadius: 10, alignSelf: 'flex-start', margin: 5}}>
+                                <Text style={{fontSize: 18, fontWeight: 'bold', color: '#77b18d', padding: 5 }}>Hi, {name} 👋</Text>
+                            </View>
+                        : null }
+                        <View style={{flexDirection: 'row', marginBottom: 15, alignItems: 'center', justifyContent: 'space-between', width: '50%', alignSelf: 'center'}}>
+                            <Skeleton width={120} height={50} colorMode="light">
+                                    {isLoading ? null : <Text style={styles.langugage}>{programmingLang.name}</Text>}
+                            </Skeleton>
+                            <Skeleton
+                                width={50}
+                                height={50}
+                                radius={'round'}
+                                colorMode="light">
+                                    {isLoading ? null : (
+                                            <Image 
+                                            source={programmingLang.url}
+                                            style={{width: 40, height: 40}}></Image>
+                                    )}
+                                        
+                            </Skeleton>
                         </View>
-                    : null }
-                    <View style={{flexDirection: 'row', marginBottom: 15, alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style={styles.langugage}>{programmingLang.name}</Text>
-                        <Image 
-                        source={programmingLang.url}
-                        style={{width: 40, height: 40}}></Image>
+                        <View style={{alignItems: 'center', marginBottom: 20}}>
+                            <Skeleton width={300} height={62}  colorMode="light">
+                                {isLoading ? null : <Progress/> }
+                            </Skeleton>
+                        </View>
+                        <Skeleton width={'100%'} height={400} colorMode="light">
+                            {isLoading ? null : <QuestionContent/>}
+                        </Skeleton>
                     </View>
-                    <View style={{alignItems: 'center'}}>
-                        <Progress/>
-                    </View>
-                    <QuestionContent/>
-                </View>
-            )}
-        </ScrollView>
+                    <ModalError isError={isError} setIsError={setIsError}/>
+            </ScrollView>
+        
         
     )
 }

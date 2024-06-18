@@ -1,16 +1,6 @@
 import React from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 
-export const Loading: React.FC = () => {
-    return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator size="large"/> 
-          <Text>Сделать скелетон</Text>
-          {/* Сделать СКЕЛЕТОН */}
-        </View>
-      )
-}
-
 export const LoadingAnswer = () => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', height: 400}}>

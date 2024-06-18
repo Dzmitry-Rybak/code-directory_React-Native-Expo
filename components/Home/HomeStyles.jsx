@@ -7,6 +7,7 @@ export default styles = StyleSheet.create({
         flex: 1
     },
     langugage: {
+        alignSelf: 'flex-end',
         fontWeight: 'bold',
         fontSize: 30,
         color: 'white',

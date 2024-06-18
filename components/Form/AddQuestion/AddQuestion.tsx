@@ -2,30 +2,36 @@ import React from "react";
 import { View, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { Formik } from 'formik';
 import RNPickerSelect from 'react-native-picker-select';
-import { postQuestion } from "../../../service/fetches";
+
 import { validSchemaAddQuestion } from "../validSchema";
-import { ModalAddQuestionUnauthorized, ModalQuestionAdded } from "../../Modal/Modal";
+import { ModalAddQuestionUnauthorized, ModalQuestionAdded, ModalError } from "../../Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchQuestionsData } from "../../../service/fetches";
+
 import { questionsFetched } from "../../../redux/actions";
+
+import useCodeDirService from "../../../service/CodeDirectoryService";
 
 import styles from './AddQuestionStyles';
 
 const AddQuestion: React.FC = () => {
+    const {postQuestion, fetchQuestionsData} = useCodeDirService();
     const [isModalVisibleSignIn, setIsModalVisibleSignIn] = React.useState(false);
     const [isModalVisibleAdded, setIsModalVisibleAdded] = React.useState(false);
+    const [isError, setIsError] = React.useState(false);
+
     const { language, stack } = useSelector(state => state.questionsReducer);
     const dispatch = useDispatch();
 
     const fetchQuestins = async () => {
         await fetchQuestionsData(stack, language)
             .then(data => {
+                setIsError(false);
                 dispatch(questionsFetched(data.data));
             })
             .catch(err => {
+                setIsError(true);
                 console.error(err)
-                Alert.alert('Please try again later.')
             })
     }
 
@@ -34,6 +40,7 @@ const AddQuestion: React.FC = () => {
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
+            <ModalError isError={isError} setIsError={setIsError}/>
             <Formik
                 initialValues={{ 
                     question: '',
@@ -50,8 +57,8 @@ const AddQuestion: React.FC = () => {
                             values.question = '';
                             values.answer = '';
                             setTimeout(async () => {
-                                setIsModalVisibleAdded(true);
-                            }, 3000)
+                                setIsModalVisibleAdded(false);
+                            }, 5000)
                         } else if (data.message === 'Unauthorized') {
                             setIsModalVisibleSignIn(true);
                             setTimeout(async () => {
@@ -74,6 +81,7 @@ const AddQuestion: React.FC = () => {
                             <TextInput
                                 style={styles.input}
                                 value={values.question}
+                                placeholderTextColor="#b0b0b0"
                                 onChangeText={handleChange('question')}
                                 onBlur={handleBlur('question')}
                                 placeholder="type your question..." />
@@ -83,6 +91,7 @@ const AddQuestion: React.FC = () => {
                             <TextInput
                                 style={styles.input}
                                 value={values.answer}
+                                placeholderTextColor="#b0b0b0"
                                 onChangeText={handleChange('answer')}
                                 onBlur={handleBlur('answer')}
                                 placeholder="type answer..." />

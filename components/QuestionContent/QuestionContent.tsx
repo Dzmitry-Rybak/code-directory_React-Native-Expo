@@ -1,18 +1,17 @@
 import React from "react";
 import { Text, View, TouchableOpacity, Animated } from "react-native";
-
-import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector, useDispatch } from 'react-redux';
+
 import { IRootState } from "../../interfaces/Questions";
 import styles from './QuestionContentStyles';
 import { questionSelected, questionSelectedId, repeatData, memorizedData, questionsFetching } from "../../redux/actions";
 import { LoadingAnswer} from "../Loading/Loading";
-import { getFilteredQuestions, postFilteredQuestons } from "../../service/fetches";
-
 import { ModalExample, ModalPleaseSignUp } from "../Modal/Modal";
-
+import useCodeDirService from "../../service/CodeDirectoryService";
 
 const QuestionContent: React.FC = () => {
+    const {getFilteredQuestions, postFilteredQuestons} = useCodeDirService()
     const [isModalVisibleExample, setIsModalVisibleExample] = React.useState(false);
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
     const [isNextDisable, setIsNextDisable] = React.useState(false);
@@ -21,10 +20,8 @@ const QuestionContent: React.FC = () => {
 
     const opacity = React.useRef(new Animated.Value(0)).current;
     const translateY = React.useRef(new Animated.Value(10)).current;
-
-    const [isAsyncStorageLoaded, setIsAsyncStorageLoaded] = React.useState(false);
     
-    const {pickedQuestion, selectedId, stack, language, isLogged, questions, isLoadingQuestions} = useSelector((state:IRootState) => state.questionsReducer);
+    const {pickedQuestion, selectedId, stack, language, isLogged, questions} = useSelector((state:IRootState) => state.questionsReducer);
     const { repeatQuestion, memorizedQuestions } = useSelector((state) => state.filterReducer);
 
     const dispatch = useDispatch();
@@ -53,22 +50,24 @@ const QuestionContent: React.FC = () => {
 
     React.useEffect(() => {
         filtersRequest();
-    }, [isLogged, stack, language]); //selectedId, 
+    }, [isLogged, stack, language]);
 
     const fetchAnswer = () => {
         const pickedQ = questions.findIndex(question => {
             return question.row_num == selectedId
-        })
-        setTimeout(() => {
-            dispatch(questionSelected(questions[pickedQ]))
-        }, 200)
-
-        if(pickedQ === -1) {
-            (async () => {
-                await AsyncStorage.setItem('selectedId', '1');
-                dispatch(questionSelectedId(1));
-            })();
+        });
+        
+        // поиграться с сеттаймаут
+        if (pickedQ === -1) {
+            AsyncStorage.setItem('selectedId', '1');
+            dispatch(questionSelectedId(1));
+            
+        } else {
+            setTimeout(() => {
+                dispatch(questionSelected(questions[pickedQ]));
+            }, 500);
         }
+
 
     }
 
@@ -76,12 +75,12 @@ const QuestionContent: React.FC = () => {
         Animated.parallel([
             Animated.timing(opacity, {
                 toValue: 1,
-                duration: 1200,
+                duration: 500,
                 useNativeDriver: true,
             }),
             Animated.timing(translateY, {
                 toValue: 0,
-                duration: 1200,
+                duration: 500,
                 useNativeDriver: true,
             })
         ]).start();
@@ -91,12 +90,12 @@ const QuestionContent: React.FC = () => {
         Animated.parallel([
             Animated.timing(opacity, {
                 toValue: 0,
-                duration: 400,
+                duration: 500,
                 useNativeDriver: true,
             }),
             Animated.timing(translateY, {
                 toValue: 10,
-                duration: 400,
+                duration: 500,
                 useNativeDriver: true,
             })
         ]).start(() => {
@@ -137,10 +136,6 @@ const QuestionContent: React.FC = () => {
             setIsLoggedIn(false);
         }, 5000);
     };
-    
-    if(isLoadingQuestions){
-        return <LoadingAnswer/>
-    }
 
     const onRepeatQuestion = async (id: number) => {
         if(!isLogged && !isUnauthShowed) unauthorizedProgress();
@@ -187,7 +182,6 @@ const QuestionContent: React.FC = () => {
             backgroundColor: '#fff',
             padding: 15,
             borderRadius: 10,
-            marginTop: 20,
             flex: 1,
             marginBottom: 40,
             opacity,

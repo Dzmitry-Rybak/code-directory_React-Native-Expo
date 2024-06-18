@@ -3,6 +3,7 @@ import { View, Text, Image, Dimensions, TouchableWithoutFeedback  } from "react-
 import Modal from "react-native-modal";
 import hands from  '../../assets/hand-shake.png';
 import hello from '../../assets/hello.png';
+import goodIcon from '../../assets/goodIcon.png'
 
 export const ModalLogin = ({isModalVisible, setIsModalVisible}) => {
     return (
@@ -20,7 +21,7 @@ export const ModalLogin = ({isModalVisible, setIsModalVisible}) => {
             <View style={{borderWidth: 2, backgroundColor: 'white', padding: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
                 <Image
                   source={hello}
-                  style={{width: 100, height: 100}}/>
+                  style={{width: 70, height: 70}}/>
                 <View style={
                 {
                   position: 'absolute',
@@ -31,9 +32,8 @@ export const ModalLogin = ({isModalVisible, setIsModalVisible}) => {
                   borderRadius: 10 / 2
                 }
                 }/>
-                <Text style={{fontSize: 16, color: 'green', fontWeight: 'bold'}}>Congratulations !</Text>
-                <Text>Welcome to this wonderful world of learning!</Text>
-                <Text style={{marginTop: 40, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>GET STARTED</Text>
+                <Text style={{fontSize: 24, color: '#269251', fontWeight: 'bold', paddingBottom: 20}}>Welcome to the app</Text>
             </View>
         </Modal>
       </View>
@@ -246,24 +246,14 @@ export const ModalError = ({isError, setIsError}) => {
           onSwipeComplete={() => setIsError(false)}
           swipeDirection="down"
           customBackdrop={
-            <TouchableWithoutFeedback onPress={() => setIsError(false)}>
+            <TouchableWithoutFeedback>
               <View style={{ flex: 1, backgroundColor: '#000000' }} />
             </TouchableWithoutFeedback>
           }
           style={{ justifyContent: 'flex-end', margin: 0 }}>
-            <View style={{ backgroundColor: '#e4d71e', padding: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
-                <View style={
-                  {
-                    position: 'absolute',
-                    top: 10,
-                    width: 40,
-                    height: 7,
-                    backgroundColor: 'gray',
-                    borderRadius: 10 / 2
-                  }
-                }/>
-                <Text style={{fontSize: 20, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>Error, please try again later.</Text>
-                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+            <View style={{ backgroundColor: '#e4d71e', padding: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center', height: 220}}>
+                <Text style={{fontSize: 28, color: '#ec0909', fontWeight: 'bold', textAlign: 'center', marginBottom: 20}}>Error :(</Text>
+                <Text style={{fontSize: 22, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>Please check your Internet connection and reload the app</Text>
             </View>
         </Modal>
     </View>
@@ -302,3 +292,40 @@ export const ModalPleaseSignUp = ({isLoggedIn, setIsLoggedIn}) => {
   ); 
 }
 
+
+
+export const ModalCodeAdded = ({isModalAddedCode, setIsModalAddedCode}) => {
+
+  return (
+    <View>
+      <Modal 
+        isVisible={isModalAddedCode}
+        onSwipeComplete={() => setIsModalAddedCode(false)}
+        swipeDirection="down"
+        customBackdrop={
+          <TouchableWithoutFeedback onPress={() => setIsModalAddedCode(false)}>
+            <View style={{ flex: 1, backgroundColor: '#000000' }} />
+          </TouchableWithoutFeedback>
+        }
+        style={{ justifyContent: 'flex-end', margin: 0 }}>
+          <View style={{borderWidth: 2, backgroundColor: 'white', padding: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
+              <Image
+                source={goodIcon}
+                style={{width: 70, height: 70, marginBottom: 20}}/>
+              <View style={
+                {
+                  position: 'absolute',
+                  top: 10,
+                  width: 40,
+                  height: 7,
+                  backgroundColor: 'gray',
+                  borderRadius: 10 / 2
+                }
+              }/>
+              <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold', textAlign: 'center'}}>Your code has been successfully submitted.</Text>
+              <Text style={{marginTop: 40, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+          </View>
+      </Modal>
+    </View>
+  );
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useSelector, useDispatch } from 'react-redux';
 import { questionSelectedId, filteredQuestion } from '../../redux/actions';

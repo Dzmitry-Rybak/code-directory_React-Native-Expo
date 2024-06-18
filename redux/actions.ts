@@ -8,6 +8,7 @@ export const QUESTION_SELECTED_ID_FROM_STORE = 'QUESTION_SELECTED_ID_FROM_STORE'
 export const FILTER = 'FILTER';
 export const REPEAT_QUESTION = 'REPEAT_QUESTION';
 export const MEMORIZED_QUESTIONS = 'MEMORIZED_QUESTIONS';
+export const PICKER_STACK_RENDER = 'PICKER_STACK_RENDER';
 
 export const questionsFetching = (isLoadingQuestions) => ({
     type: 'QUESTIONS_FETCHING',
@@ -17,6 +18,11 @@ export const questionsFetching = (isLoadingQuestions) => ({
 export const questionsUpdate = (updateQuestionsFetch) => ({
     type: 'QUESTIONS_FETCHING',
     payload: updateQuestionsFetch
+});
+
+export const stackPickerFetching = (pickerStacksRender) => ({
+    type: 'PICKER_STACK_RENDER',
+    payload: pickerStacksRender
 });
 
 export const questionsFetched = (questions) => {
