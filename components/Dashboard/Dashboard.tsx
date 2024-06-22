@@ -25,6 +25,10 @@ const Dashboard: React.FC = () => {
         Linking.openURL(`mailto:${config.socialLinks.email}`)
     }
 
+    const hangleOpenTerms = () => {
+        Linking.openURL(`https://code-directory.com/Terms-and-Conditions.html`)
+    }
+
     const hangleWebPress = () => {
         Linking.openURL(`http://code-directory.com/`)
     }
@@ -134,6 +138,9 @@ const Dashboard: React.FC = () => {
                         <Text style={{textAlign:'center', fontWeight: 'bold'}}>Sign Out</Text>
                     </TouchableOpacity>
                 </View>
+                <TouchableOpacity onPress={hangleOpenTerms}>
+                        <Text style={{textDecorationLine: 'underline', textAlign: 'center', fontSize: 18, fontFamily: 'Kanit-Bold'}}>Terms & Conditions</Text>
+                </TouchableOpacity>
             </View>
             <ModalCodeAdded isModalAddedCode={isModalAddedCode} setIsModalAddedCode={setIsModalAddedCode}/>
         </View>

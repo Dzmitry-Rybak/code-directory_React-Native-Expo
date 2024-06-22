@@ -28,7 +28,7 @@ const CreateAccount: React.FC = () => {
     }
 
     const hangleOpenTerms = () => {
-        Linking.openURL(`https://code-directory.com/Terms-and-Conditions_code-directory_Jen24.pdf`)
+        Linking.openURL(`https://code-directory.com/Terms-and-Conditions.html`)
     }
 
     return (
