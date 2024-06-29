@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, P
 import { useNavigation } from '@react-navigation/native';
 import { Formik } from 'formik';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 import { useDispatch } from "react-redux";
 import { isLoggedIn } from "../../../redux/actions";
@@ -23,7 +24,7 @@ const SignIn: React.FC = () => {
     const [isModalIncorrect, setIsModalIncorrect] = React.useState(false);
     const [isModalNoEmail, setIsModalNoEmail] = React.useState(false);
     const [isError, setIsError] = React.useState(false);
-    
+    const { t } = useTranslation();
     
     const goToCreateAccount = () => {
         navigation.navigate('CreateAccount');
@@ -75,8 +76,8 @@ const SignIn: React.FC = () => {
             <View style={styles.container}>
                 <View style={styles.wrapper}>
                     <Image source={logo} style={{ width: 120, height: 120, alignSelf: 'center', tintColor: 'gray' }} />
-                    <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 30}}>Welcome back</Text>
-                    <Text style={{ textAlign: 'center', marginTop: 5 }}>Sign to continue</Text>
+                    <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 30}}>{t('welcomeBack')}</Text>
+                    <Text style={{ textAlign: 'center', marginTop: 5 }}>{t('signToCont')}</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="EMAIL" 
@@ -93,7 +94,7 @@ const SignIn: React.FC = () => {
                     
                     <TextInput
                         style={styles.input}
-                        placeholder="PASSWORD" 
+                        placeholder={t('password').toLocaleUpperCase()} 
                         placeholderTextColor="#b0b0b0"
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
@@ -105,10 +106,10 @@ const SignIn: React.FC = () => {
                         <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.password}</Text>
                     }
                     <TouchableOpacity style={styles.submit} onPress={ handleSubmit } disabled={!isValid}>
-                            <Text style={{ textAlign: 'center' }}>SIGN IN</Text>
+                            <Text style={{ textAlign: 'center' }}>{t('signIn')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ alignItems: 'center', marginTop: 20 }} onPress={goToCreateAccount}>
-                        <Text style={{textDecorationLine: 'underline'}}>Don't have account? Create a new account</Text>
+                        <Text style={{textDecorationLine: 'underline'}}>{t('dontHaveAcc')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

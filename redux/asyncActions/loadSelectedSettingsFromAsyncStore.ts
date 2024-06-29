@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { QUESTION_SELECTED_ID_FROM_STORE, STACK_SELECTED_FROM_STORE, LANGUAGE_SELECTED_FROM_STORE } from "../actions";
+import i18n from "../../config/i18n";
 
 export const loadSelectedSettingsFromAsyncStore = () => {
     return async (dispatch) => {
@@ -10,6 +11,8 @@ export const loadSelectedSettingsFromAsyncStore = () => {
                 AsyncStorage.getItem('selectedId')
             ]);
 
+            i18n.changeLanguage(language);
+            
             if (stack !== null) {
                 dispatch({
                     type: STACK_SELECTED_FROM_STORE,

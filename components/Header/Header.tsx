@@ -7,6 +7,7 @@ import { DrawerActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from 'moti/skeleton';
+import i18n from "../../config/i18n";
 
 import { languageSelected, stackSelected, stackPickerFetching } from "../../redux/actions";
 import useCodeDirService from "../../service/CodeDirectoryService";
@@ -78,7 +79,7 @@ const Header: React.FC<DrawerContentComponentProps> = React.memo(({navigation}) 
 
     return (
             <View style={styles.headerContainer}>
-                <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
                     <Ionicons name="menu" size={30} />
                 </TouchableOpacity>
                 <View style={styles.picker}>
@@ -141,6 +142,7 @@ const Header: React.FC<DrawerContentComponentProps> = React.memo(({navigation}) 
                         placeholder={{ label: "Language", value: language }}
                         onValueChange={async (value) => {
                             await AsyncStorage.setItem('language', value);
+                            i18n.changeLanguage(value);
                             dispatch(languageSelected(value));
                         }}
                         useNativeAndroidPickerStyle={false}

@@ -6,7 +6,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { validSchemaAddQuestion } from "../validSchema";
 import { ModalAddQuestionUnauthorized, ModalQuestionAdded, ModalError } from "../../Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
-
+import { useTranslation } from 'react-i18next';
 
 import { questionsFetched } from "../../../redux/actions";
 
@@ -22,6 +22,7 @@ const AddQuestion: React.FC = () => {
 
     const { language, stack } = useSelector(state => state.questionsReducer);
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     const fetchQuestins = async () => {
         await fetchQuestionsData(stack, language)
@@ -76,7 +77,7 @@ const AddQuestion: React.FC = () => {
                 {({ handleChange, handleBlur, values, handleSubmit, touched, errors, isValid }) => (
                     <View style={styles.container}>
                         <View style={styles.wrapper}>
-                            <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 28, fontFamily: 'Kanit-Bold' }}>ADD QUESTIONS 📚</Text>
+                            <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 28, fontFamily: 'Kanit-Bold' }}>{t('addQuestion')} 📚</Text>
                             
                             <TextInput
                                 style={styles.input}
@@ -84,7 +85,7 @@ const AddQuestion: React.FC = () => {
                                 placeholderTextColor="#b0b0b0"
                                 onChangeText={handleChange('question')}
                                 onBlur={handleBlur('question')}
-                                placeholder="type your question..." />
+                                placeholder={t('typeYourQuestion')} />
                             {errors.question && touched.question &&
                                 <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.question}</Text>
                             }
@@ -94,13 +95,14 @@ const AddQuestion: React.FC = () => {
                                 placeholderTextColor="#b0b0b0"
                                 onChangeText={handleChange('answer')}
                                 onBlur={handleBlur('answer')}
-                                placeholder="type answer..." />
+                                placeholder={t('typeAnswer')} />
                             {errors.answer && touched.answer &&
                                 <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.answer}</Text>
                             }
                             <View style={styles.picker}>
                                 <RNPickerSelect
                                     onValueChange={programStack => values.stack = programStack}
+                                    placeholder={{ label: t('selectItem'), value: values.stack }}
                                     useNativeAndroidPickerStyle={false}
                                     items={[
                                         { label: 'JavaScript', value: 'javascript' },
@@ -115,6 +117,7 @@ const AddQuestion: React.FC = () => {
                             <View style={styles.picker}>
                                 <RNPickerSelect
                                     onValueChange={lang => values.language = lang}
+                                    placeholder={{ label: t('selectItem'), value: values.language }}
                                     useNativeAndroidPickerStyle={false}
                                     items={[
                                         { label: 'English', value: 'english' },
@@ -126,7 +129,7 @@ const AddQuestion: React.FC = () => {
                                 <Text style={{ fontSize: 12, color: 'red', marginTop: 5, alignSelf: 'center' }}>{errors.language}</Text>
                             }
                             <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
-                                <Text style={{ textAlign: 'center' }}>ADD</Text>
+                                <Text style={{ textAlign: 'center' }}>{t('add')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

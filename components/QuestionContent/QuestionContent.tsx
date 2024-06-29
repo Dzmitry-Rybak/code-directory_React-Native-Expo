@@ -2,6 +2,7 @@ import React from "react";
 import { Text, View, TouchableOpacity, Animated } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { IRootState } from "../../interfaces/Questions";
 import styles from './QuestionContentStyles';
@@ -17,6 +18,7 @@ const QuestionContent: React.FC = () => {
     const [isNextDisable, setIsNextDisable] = React.useState(false);
     const [isPrevDisable, setIsPrevDisable] = React.useState(false);
     const [isUnauthShowed, setIsUnauthShowed] = React.useState(false);
+    const { t } = useTranslation();
 
     const opacity = React.useRef(new Animated.Value(0)).current;
     const translateY = React.useRef(new Animated.Value(10)).current;
@@ -191,24 +193,24 @@ const QuestionContent: React.FC = () => {
             <Text style={{ minHeight: 200, fontSize: 15, }}>{pickedQuestion.answer}</Text>
             <View style={styles.btnWrapper}>
                 <TouchableOpacity style={isPrevDisable ? styles.btnDisabled : styles.btn}  onPress={handlePrevQuestion} disabled={isPrevDisable}>
-                    <Text style={styles.btnText}>PREV</Text>
+                    <Text style={styles.btnText}>{t('prev')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={pickedQuestion.example_path === 'not available' ? styles.btnDisabled : styles.btn} 
                     onPress={() => setIsModalVisibleExample(true)} 
                     disabled={pickedQuestion.example_path === 'not available'}>
-                        <Text style={styles.btnText}>EXAMPLE</Text>
+                        <Text style={styles.btnText}>{t('example')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={isNextDisable ? styles.btnDisabled : styles.btn} onPress={handleNextQuestion} disabled={isNextDisable}>
-                    <Text style={styles.btnText}>NEXT</Text>
+                    <Text style={styles.btnText}>{t('next')}</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.btnFetch}>
                 <TouchableOpacity style={styles.btn} onPress={() => onRepeatQuestion(pickedQuestion.question_id)}>
-                    <Text style={styles.btnText}>REPEAT</Text>
+                    <Text style={styles.btnText}>{t('repeat')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn} onPress={() => onMemorizedQuestion(pickedQuestion.question_id)}>
-                    <Text style={styles.btnText}>MEMORIZED</Text>
+                    <Text style={styles.btnText}>{t('memorized')}</Text>
                 </TouchableOpacity>
             </View>
             <ModalPleaseSignUp isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>

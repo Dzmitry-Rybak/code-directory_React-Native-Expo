@@ -10,7 +10,7 @@ import { isLoggedIn } from "../../../redux/actions";
 import { Formik } from 'formik';
 import { validSchemaCreateAccount } from "../validSchema.jsx";
 import styles from '../FormStyles.jsx';
-
+import { useTranslation } from 'react-i18next';
 
 import useCodeDirService from "../../../service/CodeDirectoryService";
 
@@ -21,7 +21,7 @@ const CreateAccount: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [isModalExists, setIsModalExists] = React.useState(false);
     const [isError, setIsError] = React.useState(false);
-
+    const { t } = useTranslation();
 
     const goToSignIn = () => {
         navigation.navigate('LogIn');
@@ -75,12 +75,12 @@ const CreateAccount: React.FC = () => {
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
                 <View style={styles.container}>
                     <View style={styles.wrapper}>
-                        <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 30 }}>Create Account</Text>
-                        <Text style={{ textAlign: 'center', marginTop: 5  }}>Create a new account</Text>
+                        <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 30 }}>{t('createAcc')}</Text>
+                        <Text style={{ textAlign: 'center', marginTop: 5  }}>{t('createNewAcc')}</Text>
 
                         <TextInput
                             style={styles.input}
-                            placeholder="LOGIN" 
+                            placeholder={t('login')}
                             placeholderTextColor="#b0b0b0"
                             onChangeText={handleChange('login')}
                             onBlur={handleBlur('login')}
@@ -106,7 +106,7 @@ const CreateAccount: React.FC = () => {
 
                         <TextInput
                             style={styles.input}
-                            placeholder="CONFIRM EMAIL" 
+                            placeholder={t('confirmEml').toLocaleUpperCase()} 
                             placeholderTextColor="#b0b0b0"
                             onChangeText={handleChange('emailConfirm')}
                             onBlur={handleBlur('emailConfirm')}
@@ -120,7 +120,7 @@ const CreateAccount: React.FC = () => {
 
                         <TextInput
                             style={styles.input}
-                            placeholder="PASSWORD" 
+                            placeholder={t('password').toLocaleUpperCase()} 
                             placeholderTextColor="#b0b0b0"
                             onChangeText={handleChange('password')}
                             onBlur={handleBlur('password')}
@@ -134,7 +134,7 @@ const CreateAccount: React.FC = () => {
 
                         <TextInput
                             style={styles.input}
-                            placeholder="CONFIRM PASSWORD" 
+                            placeholder={t('confirmPass').toLocaleUpperCase()} 
                             placeholderTextColor="#b0b0b0"
                             onChangeText={handleChange('passwordConfirm')}
                             onBlur={handleBlur('passwordConfirm')}
@@ -154,7 +154,7 @@ const CreateAccount: React.FC = () => {
                             onPress={(isChecked: boolean) => {values.terms = isChecked}}
                         />
                         <TouchableOpacity onPress={hangleOpenTerms}>
-                            <Text style={{textDecorationLine: 'underline'}}>I confirm that I've read and I agree to the Terms & Conditions*</Text>
+                            <Text style={{textDecorationLine: 'underline', width: '50%'}}>{t('confirmTerms')}</Text>
                         </TouchableOpacity>
                     </View>
                     {errors.terms && touched.terms &&
@@ -162,10 +162,10 @@ const CreateAccount: React.FC = () => {
                     }
 
                         <TouchableOpacity style={styles.submit} onPress={ handleSubmit }>
-                                <Text style={{ textAlign: 'center' }}>CREATE ACCOUNT</Text>
+                                <Text style={{ textAlign: 'center' }}>{t('createAcc').toLocaleUpperCase()}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{ alignItems: 'center', marginTop: 20 }} onPress={() => goToSignIn()}>
-                            <Text style={{textDecorationLine: 'underline'}}>Already have a account? Login</Text>
+                            <Text style={{textDecorationLine: 'underline'}}>{t('alreadeHaveAcc')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>)}

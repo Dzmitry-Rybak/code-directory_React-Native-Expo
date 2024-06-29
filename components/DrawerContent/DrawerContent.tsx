@@ -9,8 +9,7 @@ import { IRootState } from '../../interfaces/Questions';
 import { getTextDecoration, getColor } from './dynamicStyles';
 import styles from './DrawerContentStyles';
  
-
-
+import { useTranslation } from 'react-i18next';
 
 interface DrawerContentPoprs extends DrawerContentComponentProps {}
 
@@ -20,6 +19,7 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
     const {filter, repeatQuestion, memorizedQuestions} = useSelector((state) => state.filterReducer);
     
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     const filterSelected = (filt) => {
         dispatch(filteredQuestion(filt));
@@ -65,17 +65,17 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15}}>
                     <View>
                         <TouchableOpacity style={styles.filterBtn} onPress={() => filterSelected('remaining')}>
-                            <Text style={styles.filterText}>REMAINING QUESTIONS</Text>
+                            <Text style={styles.filterText}>{t('remaining')}</Text>
                         </TouchableOpacity>
                     </View>
                     <View>
                         <TouchableOpacity style={styles.filterBtn} onPress={() => filterSelected('repeat')}>
-                            <Text style={styles.filterText}>QUESTIONS TO REPEAT</Text>
+                            <Text style={styles.filterText}>{t('questionsToRepeat')}</Text>
                         </TouchableOpacity>
                     </View>
                     <View>
                         <TouchableOpacity style={styles.filterBtn} onPress={() => filterSelected('all')}>
-                            <Text style={styles.filterText}>ALL QUESTIONS</Text>
+                            <Text style={styles.filterText}>{t('allQuestions')}</Text>
                         </TouchableOpacity>
                     </View>
                     
@@ -83,7 +83,7 @@ const DrawerContent: React.FC<DrawerContentPoprs> = ( { navigation }) => {
                 {filteredQuestions.length > 0 ? (
                     <FlatList data={filteredQuestions} renderItem={renderItem} keyExtractor={(item) => item.question_id} />
                 ) : (
-                    <Text style={{fontSize: 20, fontWeight: 'bold', alignSelf: 'center'}}>Empty.. </Text>
+                    <Text style={{fontSize: 20, fontWeight: 'bold', alignSelf: 'center'}}>{t('empty')}</Text>
                 )}
             </View>
         </SafeAreaView>

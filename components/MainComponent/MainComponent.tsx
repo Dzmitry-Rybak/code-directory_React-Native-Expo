@@ -36,7 +36,7 @@ const MainComponent = () => {
                 <NavigationContainer
                     theme={{
                         colors: {
-                            background: 'transparent'
+                            background: 'transparent',
                         },
                     }}>
                     <Drawer.Navigator
@@ -49,6 +49,9 @@ const MainComponent = () => {
                                 backgroundColor: '#6a8c94',
                                 width: '80%',
                             },
+                            swipeEdgeWidth: 400,
+                            gestureHandlerProps: {
+                            }
                         }}>
                         <Drawer.Screen
                             name="Questions"

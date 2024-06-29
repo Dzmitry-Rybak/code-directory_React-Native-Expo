@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import styles from './ProgressStyles';
 
 const Progress: React.FC = () => {
     const { questions } = useSelector((state) => state.questionsReducer);
     const { memorizedQuestions } = useSelector((state) => state.filterReducer);
+    const { t } = useTranslation();
 
     const getProgressWidth = (memorizedQuestionsLength, questionsCount) => {
         return `${(memorizedQuestionsLength * 100) / questionsCount}%`
@@ -14,7 +15,7 @@ const Progress: React.FC = () => {
 
     return (
         <View style={styles.wrapper}>
-            <Text style={{color: 'white', fontSize: 19, fontFamily: 'Kanit-Bold'}}>Progress:</Text>
+            <Text style={{color: 'white', fontSize: 19, fontFamily: 'Kanit-Bold'}}>{t('progress')}</Text>
             <View style={styles.scaleWrap}>
                 <View style={{
                     position: 'absolute',

@@ -1,11 +1,13 @@
 import React from "react";
 import { View, Text, ActivityIndicator } from "react-native";
+import { useTranslation } from 'react-i18next';
 
 export const LoadingAnswer = () => {
+  const { t } = useTranslation();
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', height: 400}}>
       <ActivityIndicator size="large" color="#78b096" />
-      <Text style={{marginTop: 10, fontSize: 18, color: '#78b096'}}>Loading...</Text>
+      <Text style={{marginTop: 10, fontSize: 18, color: '#78b096'}}>{t('loading')}</Text>
     </View>
   )
 }

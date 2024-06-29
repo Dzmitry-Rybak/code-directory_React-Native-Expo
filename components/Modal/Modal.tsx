@@ -1,11 +1,15 @@
 import React from "react";
 import { View, Text, Image, Dimensions, TouchableWithoutFeedback  } from "react-native";
+import { useTranslation } from 'react-i18next';
 import Modal from "react-native-modal";
 import hands from  '../../assets/hand-shake.png';
 import hello from '../../assets/hello.png';
 import goodIcon from '../../assets/goodIcon.png'
 
+
+
 export const ModalLogin = ({isModalVisible, setIsModalVisible}) => {
+    const { t } = useTranslation();
     return (
       <View>
         <Modal 
@@ -32,8 +36,8 @@ export const ModalLogin = ({isModalVisible, setIsModalVisible}) => {
                   borderRadius: 10 / 2
                 }
                 }/>
-                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>GET STARTED</Text>
-                <Text style={{fontSize: 24, color: '#269251', fontWeight: 'bold', paddingBottom: 20}}>Welcome to the app</Text>
+                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>{t('getStarted')}</Text>
+                <Text style={{fontSize: 24, color: '#269251', fontWeight: 'bold', paddingBottom: 20}}>{t('welcomeToApp')}</Text>
             </View>
         </Modal>
       </View>
@@ -41,7 +45,7 @@ export const ModalLogin = ({isModalVisible, setIsModalVisible}) => {
 }
 
 export const ModalAddQuestionUnauthorized = ({isModalVisibleSignIn, setIsModalVisibleSignIn}) => {
-
+  const { t } = useTranslation();
     return (
       <View>
         <Modal 
@@ -68,8 +72,8 @@ export const ModalAddQuestionUnauthorized = ({isModalVisibleSignIn, setIsModalVi
                     borderRadius: 10 / 2
                   }
                 }/>
-                <Text style={{fontSize: 26, color: 'black', fontWeight: 'bold', textAlign: 'center'}}>Please sign in to post your own question.</Text>
-                <Text style={{marginTop: 40, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+                <Text style={{fontSize: 26, color: 'black', fontWeight: 'bold', textAlign: 'center'}}>{t('signInToPost')}</Text>
+                <Text style={{marginTop: 40, color: 'rgba(0, 0, 0, 0.3)'}}>{t('swipeDown')}</Text>
             </View>
         </Modal>
       </View>
@@ -77,7 +81,7 @@ export const ModalAddQuestionUnauthorized = ({isModalVisibleSignIn, setIsModalVi
 }
 
 export const ModalQuestionAdded= ({isModalVisibleAdded, setIsModalVisibleAdded}) => {
-
+  const { t } = useTranslation();
     return (
       <View>
         <Modal 
@@ -104,8 +108,8 @@ export const ModalQuestionAdded= ({isModalVisibleAdded, setIsModalVisibleAdded})
                     borderRadius: 10 / 2
                   }
                 }/>
-                <Text style={{fontSize: 26, color: 'black', fontWeight: 'bold', textAlign: 'center'}}>Your question has been successfully submitted.</Text>
-                <Text style={{marginTop: 40, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+                <Text style={{fontSize: 26, color: 'black', fontWeight: 'bold', textAlign: 'center'}}>{t('questionAdded')}</Text>
+                <Text style={{marginTop: 40, color: 'rgba(0, 0, 0, 0.3)'}}>{t('swipeDown')}</Text>
             </View>
         </Modal>
       </View>
@@ -116,6 +120,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export const ModalExample = ({isModalVisibleExample, setIsModalVisibleExample, src}) => {
+  const { t } = useTranslation();
   return (
     <View>
         <Modal
@@ -151,7 +156,7 @@ export const ModalExample = ({isModalVisibleExample, setIsModalVisibleExample, s
                     padding: 5,
                     borderWidth: 2,
                     borderColor: '#b56c6c'
-                  }}>Close example</Text>
+                  }}>{t('closeExmpl')}</Text>
                 </TouchableWithoutFeedback>
             </View>
         </Modal>
@@ -161,6 +166,7 @@ export const ModalExample = ({isModalVisibleExample, setIsModalVisibleExample, s
 }
 
 export const ModalIncorrect = ({isModalIncorrect, setIsModalIncorrect}) => {
+  const { t } = useTranslation();
   return (
     <View>
         <Modal 
@@ -174,9 +180,9 @@ export const ModalIncorrect = ({isModalIncorrect, setIsModalIncorrect}) => {
           }
           style={{ justifyContent: 'center', margin: 30 }}>
             <View style={{ backgroundColor: '#fffefe', padding: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold', textAlign: 'center'}}>Incorrect password!</Text>
-                <Text style={{fontSize: 16, color: 'black', textAlign: 'center', marginTop: 10}}>Please check your password and try again</Text>
-                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+                <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold', textAlign: 'center'}}>{t('incorrect')}</Text>
+                <Text style={{fontSize: 16, color: 'black', textAlign: 'center', marginTop: 10}}>{t('checkPassword')}</Text>
+                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>{t('swipeDown')}</Text>
             </View>
         </Modal>
     </View>
@@ -184,6 +190,7 @@ export const ModalIncorrect = ({isModalIncorrect, setIsModalIncorrect}) => {
 }
 
 export const ModalNoEmail = ({isModalNoEmail, setIsModalNoEmail}) => {
+  const { t } = useTranslation();
   return (
     <View>
         <Modal 
@@ -198,8 +205,8 @@ export const ModalNoEmail = ({isModalNoEmail, setIsModalNoEmail}) => {
           style={{ justifyContent: 'center', margin: 30 }}>
             <View style={{ backgroundColor: '#41555c', padding: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
 
-                <Text style={{fontSize: 20, color: '#ffffff', fontWeight: 'bold', textAlign: 'center'}}>There are no users with this email address.</Text>
-                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+                <Text style={{fontSize: 20, color: '#ffffff', fontWeight: 'bold', textAlign: 'center'}}>{t('noUsers')}</Text>
+                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>{t('swipeDown')}</Text>
             </View>
         </Modal>
     </View>
@@ -207,6 +214,7 @@ export const ModalNoEmail = ({isModalNoEmail, setIsModalNoEmail}) => {
 }
 
 export const ModalEmailExists = ({isModalExists, setIsModalExists}) => {
+  const { t } = useTranslation();
   return (
     <View>
         <Modal 
@@ -230,8 +238,8 @@ export const ModalEmailExists = ({isModalExists, setIsModalExists}) => {
                     borderRadius: 10 / 2
                   }
                 }/>
-                <Text style={{fontSize: 20, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>The email address you have provided is already in use.</Text>
-                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+                <Text style={{fontSize: 20, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>{t('exailInUse')}</Text>
+                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>{t('swipeDown')}</Text>
             </View>
         </Modal>
     </View>
@@ -239,6 +247,7 @@ export const ModalEmailExists = ({isModalExists, setIsModalExists}) => {
 }
 
 export const ModalError = ({isError, setIsError}) => {
+  const { t } = useTranslation();
   return (
     <View>
         <Modal 
@@ -252,8 +261,8 @@ export const ModalError = ({isError, setIsError}) => {
           }
           style={{ justifyContent: 'flex-end', margin: 0 }}>
             <View style={{ backgroundColor: '#e4d71e', padding: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center', height: 220}}>
-                <Text style={{fontSize: 28, color: '#ec0909', fontWeight: 'bold', textAlign: 'center', marginBottom: 20}}>Error :(</Text>
-                <Text style={{fontSize: 22, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>Please check your Internet connection and reload the app</Text>
+                <Text style={{fontSize: 28, color: '#ec0909', fontWeight: 'bold', textAlign: 'center', marginBottom: 20}}>{t('error')} :(</Text>
+                <Text style={{fontSize: 22, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>{t('noInternet')}</Text>
             </View>
         </Modal>
     </View>
@@ -261,6 +270,7 @@ export const ModalError = ({isError, setIsError}) => {
 }
 
 export const ModalPleaseSignUp = ({isLoggedIn, setIsLoggedIn}) => {
+  const { t } = useTranslation();
   return (
     <View>
         <Modal 
@@ -284,8 +294,8 @@ export const ModalPleaseSignUp = ({isLoggedIn, setIsLoggedIn}) => {
                     borderRadius: 10 / 2
                   }
                 }/>
-                <Text style={{fontSize: 20, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>To unlock the ability to save your progress, simply log in.</Text>
-                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+                <Text style={{fontSize: 20, color: '#000000', fontWeight: 'bold', textAlign: 'center'}}>{t('loginToSaveProgress')}</Text>
+                <Text style={{marginTop: 20, color: 'rgba(0, 0, 0, 0.3)'}}>{t('swipeDown')}</Text>
             </View>
         </Modal>
     </View>
@@ -295,7 +305,7 @@ export const ModalPleaseSignUp = ({isLoggedIn, setIsLoggedIn}) => {
 
 
 export const ModalCodeAdded = ({isModalAddedCode, setIsModalAddedCode}) => {
-
+  const { t } = useTranslation();
   return (
     <View>
       <Modal 
@@ -322,8 +332,8 @@ export const ModalCodeAdded = ({isModalAddedCode, setIsModalAddedCode}) => {
                   borderRadius: 10 / 2
                 }
               }/>
-              <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold', textAlign: 'center'}}>Your code has been successfully submitted.</Text>
-              <Text style={{marginTop: 40, color: 'rgba(0, 0, 0, 0.3)'}}>Swipe down to hide this menu</Text>
+              <Text style={{fontSize: 20, color: 'black', fontWeight: 'bold', textAlign: 'center'}}>{t('codeSubmitted')}</Text>
+              <Text style={{marginTop: 40, color: 'rgba(0, 0, 0, 0.3)'}}>{t('swipeDown')}</Text>
           </View>
       </Modal>
     </View>

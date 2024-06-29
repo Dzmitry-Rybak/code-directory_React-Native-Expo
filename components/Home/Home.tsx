@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useSelector, useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Skeleton } from 'moti/skeleton';
-
+import { useTranslation } from 'react-i18next';
 import QuestionContent from "../QuestionContent/QuestionContent";
 import styles from './HomeStyles.jsx';
 import Progress from "../Progress/Progress";
@@ -54,6 +54,8 @@ const Home: React.FC<HomeProps>  = ({ navigation}) => {
     const [name, setName] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [isAsyncStorageLoaded, setIsAsyncStorageLoaded] = React.useState(false);
+
+    const { t } = useTranslation();
 
     const fetchQuestins = async () => {
         setIsLoading(true)
@@ -116,7 +118,7 @@ const Home: React.FC<HomeProps>  = ({ navigation}) => {
                     <View style={{paddingHorizontal: 15}}>
                         {name ? 
                             <View style={{borderWidth: 1, borderColor: '#77b18d', borderRadius: 10, alignSelf: 'flex-start', margin: 5}}>
-                                <Text style={{fontSize: 18, fontWeight: 'bold', color: '#77b18d', padding: 5 }}>Hi, {name} 👋</Text>
+                                <Text style={{fontSize: 18, fontWeight: 'bold', color: '#77b18d', padding: 5 }}>{t('welcome')}, {name} 👋</Text>
                             </View>
                         : null }
                         <View style={{flexDirection: 'row', marginBottom: 15, alignItems: 'center', justifyContent: 'space-between', width: '50%', alignSelf: 'center'}}>
